@@ -1,5 +1,7 @@
 import React from 'react'
 
+import Info from './pages/Info';
+
 const MainContent = ({content}) => {
     let pageContent;
     switch(content){
@@ -13,7 +15,7 @@ const MainContent = ({content}) => {
             pageContent = 'Strona Wniesieniowa';
             break;
         case 'info':
-            pageContent = 'Strona Infowa';
+            pageContent = <Info />;
             break;
         case 'weight':
             pageContent = 'Strona Wagowa';
