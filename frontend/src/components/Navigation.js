@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -43,8 +44,15 @@ export default function BasicTabs({setContent}) {
   return (
     <Box sx={{ width: '100%',
       position: 'absolute',
-      top: 0
+      top: 0,
+      mb:{lg:'32px', sm:'10px'}
      }}>
+      <MenuIcon sx={{
+        fontSize:'3rem',
+        position:'absolute',
+        top:'10px',
+        right:'10px'
+      }}/>
       <Box sx={{ borderBottom: 0, borderColor: 'inherit' }}>
         <Tabs 
          orientation={isSmallScreen ? "vertical" : "horizontal"}
