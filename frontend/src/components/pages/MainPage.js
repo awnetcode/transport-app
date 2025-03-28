@@ -8,13 +8,42 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { TextField } from '@mui/material';
 
+import Transport from '../../assets/data';
+
 const MainPage = () => {
 
-    const [transport, setTransport] = useState('');
+    const [transportName, setTransportName] = useState('');
+    const [transportLastZone, setTransportLastZone] = useState(0);
+    const [transportLastZonePrice, setTransportLastZonePrice] = useState(0);
+    const [transportPriceForKm, setTransportPriceForKm] = useState(0);
+    const [distance, setDistance] = useState(0);
+    const [price, setPrice] = useState(0)
 
-    const handleChange = (event) => {
-        setTransport(event.target.value);
-      };
+    const selectTransportOption = (event) =>{
+
+      setTransportName(event.target.value);
+
+      switch(transportName){
+        case 'light':
+          setTransportLastZone(30);
+          setTransportPriceForKm(8);
+          setTransportLastZonePrice(185)
+          break;
+
+          default:
+      }  
+    }
+ 
+
+    const calculatePrice = () =>{
+      const calculatedTransport = new Transport(transportLastZone, transportPriceForKm,transportLastZonePrice);
+      const calculatedPrice = (distance - calculatedTransport.lastZone) * calculatedTransport.priceForKm + calculatedTransport.lastZonePrice;
+      setPrice(calculatedPrice);
+    }
+
+    // const handleChange = (event) => {
+    //     setTransportName(event.target.value);
+    //   };
 
   return (
     <Box sx={{
@@ -32,18 +61,19 @@ const MainPage = () => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={transport}
+                value={transportName}
                 label="Tran"
-                onChange={handleChange}
+                onChange={selectTransportOption}
                 sx={{
                     color:'var(--cadet-gray)',
                     outlineOffset:'50px'
                 }}
               >
-                <MenuItem color='inherit' value={'lekki'}>Lekki</MenuItem>
-                <MenuItem color='inherit' value={'małyHds'}>Mały HDS</MenuItem>
-                <MenuItem color='inherit' value={'średniHds'}>Średni HDS</MenuItem>
-                <MenuItem color='inherit' value={'dużyHds'}>Duży HDS</MenuItem>
+                <MenuItem color='inherit' value={'light'}>Lekki</MenuItem>
+                <MenuItem color='inherit' value={'medium'}>Lekki</MenuItem>
+                <MenuItem color='inherit' value={'smallTruck'}>Mały HDS</MenuItem>
+                <MenuItem color='inherit' value={'MediumTruck'}>Średni HDS</MenuItem>
+                <MenuItem color='inherit' value={'heavyTruck'}>Duży HDS</MenuItem>
               </Select>
          </FormControl>
      </Box>
@@ -53,7 +83,15 @@ const MainPage = () => {
       noValidate
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="Dystans" variant="outlined" />
+      <TextField 
+      id="outlined-basic" 
+      label="Dystans" 
+      variant="outlined"
+      onInput={(event) => {
+        setDistance(event.target.value);
+        calculatePrice()
+      } } 
+      />
     </Box>
     <Box
       component="form"
@@ -61,7 +99,12 @@ const MainPage = () => {
       noValidate
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="Wynik" variant="outlined" />
+      <TextField 
+      id="outlined-basic" 
+      label="Wynik" 
+      variant="outlined" 
+      value={price}
+      />
     </Box>
     </Box>
   )
