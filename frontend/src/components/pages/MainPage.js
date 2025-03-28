@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -20,10 +20,10 @@ const MainPage = () => {
     const [price, setPrice] = useState(0)
 
     const selectTransportOption = (event) =>{
+      const selectedTransport = event.target.value;
+      setTransportName(selectedTransport);
 
-      setTransportName(event.target.value);
-
-      switch(transportName){
+      switch(selectedTransport){
         case 'light':
           setTransportLastZone(30);
           setTransportPriceForKm(8);
@@ -31,15 +31,21 @@ const MainPage = () => {
           break;
 
           default:
-      }  
+            setTransportLastZone(0);
+            setTransportPriceForKm(0);
+            setTransportLastZonePrice(0);
+      } 
+      console.log(transportName); 
     }
  
-
-    const calculatePrice = () =>{
-      const calculatedTransport = new Transport(transportLastZone, transportPriceForKm,transportLastZonePrice);
+    useEffect(() => {
+      const calculatedTransport = new Transport(transportLastZone, transportPriceForKm, transportLastZonePrice);
       const calculatedPrice = (distance - calculatedTransport.lastZone) * calculatedTransport.priceForKm + calculatedTransport.lastZonePrice;
-      setPrice(calculatedPrice);
-    }
+
+      if (!isNaN(calculatedPrice)) {
+          setPrice(calculatedPrice);
+      }
+  }, [distance, transportLastZone, transportPriceForKm, transportLastZonePrice]);
 
     // const handleChange = (event) => {
     //     setTransportName(event.target.value);
@@ -62,7 +68,7 @@ const MainPage = () => {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={transportName}
-                label="Tran"
+                label="Transport"
                 onChange={selectTransportOption}
                 sx={{
                     color:'var(--cadet-gray)',
@@ -70,7 +76,7 @@ const MainPage = () => {
                 }}
               >
                 <MenuItem color='inherit' value={'light'}>Lekki</MenuItem>
-                <MenuItem color='inherit' value={'medium'}>Lekki</MenuItem>
+                <MenuItem color='inherit' value={'medium'}>Średni</MenuItem>
                 <MenuItem color='inherit' value={'smallTruck'}>Mały HDS</MenuItem>
                 <MenuItem color='inherit' value={'MediumTruck'}>Średni HDS</MenuItem>
                 <MenuItem color='inherit' value={'heavyTruck'}>Duży HDS</MenuItem>
@@ -88,8 +94,8 @@ const MainPage = () => {
       label="Dystans" 
       variant="outlined"
       onInput={(event) => {
-        setDistance(event.target.value);
-        calculatePrice()
+        const inputValue = event.target.value;
+        setDistance(inputValue ? parseInt(inputValue) : 0);
       } } 
       />
     </Box>
