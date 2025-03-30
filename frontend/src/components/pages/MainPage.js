@@ -19,37 +19,118 @@ const MainPage = () => {
     const [distance, setDistance] = useState(0);
     const [price, setPrice] = useState(0)
 
-    const selectTransportOption = (event) =>{
-      const selectedTransport = event.target.value;
-      setTransportName(selectedTransport);
 
-      switch(selectedTransport){
-        case 'light':
-          setTransportLastZone(30);
-          setTransportPriceForKm(8);
-          setTransportLastZonePrice(185)
-          break;
+  // 🟢 Obsługa zmiany transportu (ustawia TYLKO nazwę)
+  const selectTransportOption = (event) => {
+    setTransportName(event.target.value);
+  };
 
-          default:
-            setTransportLastZone(0);
-            setTransportPriceForKm(0);
-            setTransportLastZonePrice(0);
-      } 
-      console.log(transportName); 
-    }
- 
+    // useEffect ustawia wartości po zmianie transportName
     useEffect(() => {
-      const calculatedTransport = new Transport(transportLastZone, transportPriceForKm, transportLastZonePrice);
-      const calculatedPrice = (distance - calculatedTransport.lastZone) * calculatedTransport.priceForKm + calculatedTransport.lastZonePrice;
 
-      if (!isNaN(calculatedPrice)) {
-          setPrice(calculatedPrice);
+      calculatePrice();
+
+      if (!transportName) return;
+      let lastZone = Transport.lastZone;
+      let priceForKm = Transport.priceForKm;
+      let lastZonePrice = Transport.lastZonePrice;
+    
+      switch (transportName) {
+        case 'light':
+          lastZone = 30;
+          priceForKm = 8;
+          lastZonePrice = 185;
+          break;
+        case 'medium':
+          lastZone = 30;
+          priceForKm = 12;
+          lastZonePrice = 370;
+          break;
+        case 'smallTruck':
+          lastZone = 10;
+          priceForKm = 13;
+          lastZonePrice = 250;
+          break;
+        case 'mediumTruck':
+          lastZone = 10;
+          priceForKm = 13;
+          lastZonePrice = 310;
+          break;
+        case 'largeTruck':
+          lastZone = 10;
+          priceForKm = 15;
+          lastZonePrice = 430;
+          break;
+        
+
+
+
+        default:
+          lastZone = 0;
+          priceForKm = 0;
+          lastZonePrice = 0;
       }
-  }, [distance, transportLastZone, transportPriceForKm, transportLastZonePrice]);
+    
+      setTransportLastZone(lastZone);
+      setTransportPriceForKm(priceForKm);
+      setTransportLastZonePrice(lastZonePrice);
+    
+    }, [transportName]);
 
-    // const handleChange = (event) => {
-    //     setTransportName(event.target.value);
-    //   };
+    // Teraz useEffect do obliczania ceny wykona się dopiero po aktualizacji wartości
+useEffect(() => {
+  if (distance <= 0) {
+    setPrice(0);
+    return;
+  }
+
+  if (!transportPriceForKm && !transportLastZonePrice) {
+    setPrice(0);
+    return;
+  }
+
+  // console.log("Distance:", distance);
+  // console.log("Last Zone:", transportLastZone);
+  // console.log("Price per Km:", transportPriceForKm);
+  // console.log("Last Zone Price:", transportLastZonePrice);
+
+  const calculatedPrice =
+    (distance - transportLastZone) * transportPriceForKm + transportLastZonePrice;
+
+ // console.log("Calculated Price:", calculatedPrice); // 🔴 Sprawdź wynik
+
+  if (!isNaN(calculatedPrice)) {
+    setPrice(calculatedPrice);
+  }
+}, [distance, transportLastZone, transportPriceForKm, transportLastZonePrice]);
+
+ 
+   // Funkcja do obliczania ceny
+   const calculatePrice = () => {
+    if (distance <= 0) {
+      setPrice(0);
+      return;
+    }
+
+    if (!transportPriceForKm && !transportLastZonePrice) {
+      setPrice(0);
+      return;
+    }
+
+    const calculatedTransport = new Transport(
+      transportLastZone,
+      transportPriceForKm,
+      transportLastZonePrice
+    );
+
+    const calculatedPrice =
+      (distance - calculatedTransport.lastZone) * calculatedTransport.priceForKm +
+      calculatedTransport.lastZonePrice;
+
+    if (!isNaN(calculatedPrice)) {
+      setPrice(calculatedPrice);
+    }
+  };
 
   return (
     <Box sx={{
