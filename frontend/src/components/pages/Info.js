@@ -53,7 +53,10 @@ Przy realizacji transportu nie generują się dane na karcie drogowej oraz czest
     <AccordionDetails>
     <h3>Lekki i średni</h3>
 Transport lekki to maksymalnie trzy miejsca paletowe o łącznej wadze do 1500kg.<br/>
-Transport średni to maksymalnie sześć miejsc paletowych o łącznej wadze do 3000kg.
+Transport średni to maksymalnie sześć miejsc paletowych o łącznej wadze do 3000kg.<br/>
+Przez jedno miejsce paletowe rozumiemy prostokąt o wymiarach 80 x 120 cm.<br/>
+Na jedno miejsce paletowe wchodzi 8 paczek styropianu lub wełny.
+Jedna płyta OSB lub G-K zajmuje 3 miejsca paletowe.
     <h3>HDS</h3>
  Mały HDS to maksymalnie cztery miejsca paletowe o łącznej wadze nie większej niż 4t. W przypadku gdy klient zdejmuje towar z palet ręcznie, każda rozpoczęta godzina rozładunku to   200 zł do ceny transportu.<br/>
  Średni HDS to maksymalnie sześć miejsc paletowych o łącznej wadze nie większej niż 8t.<br/>

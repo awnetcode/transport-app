@@ -16,13 +16,14 @@ const MainPage = () => {
     const [transportLastZone, setTransportLastZone] = useState(0);
     const [transportLastZonePrice, setTransportLastZonePrice] = useState(0);
     const [transportPriceForKm, setTransportPriceForKm] = useState(0);
+    const [zonesPrices, setZonesPrices] = useState([]);
     const [distance, setDistance] = useState(0);
-    const [price, setPrice] = useState(0)
-
+    const [price, setPrice] = useState(0);
 
   // 🟢 Obsługa zmiany transportu (ustawia TYLKO nazwę)
   const selectTransportOption = (event) => {
     setTransportName(event.target.value);
+    calculatePrice();
   };
 
     // useEffect ustawia wartości po zmianie transportName
@@ -34,17 +35,20 @@ const MainPage = () => {
       let lastZone = Transport.lastZone;
       let priceForKm = Transport.priceForKm;
       let lastZonePrice = Transport.lastZonePrice;
+      let zonesPrices = Transport.zonesPrices;
     
       switch (transportName) {
         case 'light':
           lastZone = 30;
           priceForKm = 8;
           lastZonePrice = 185;
+          zonesPrices = [85, 135, 185];
           break;
         case 'medium':
           lastZone = 30;
           priceForKm = 12;
           lastZonePrice = 370;
+          zonesPrices = [85, 135, 185];
           break;
         case 'smallTruck':
           lastZone = 10;
@@ -56,15 +60,11 @@ const MainPage = () => {
           priceForKm = 13;
           lastZonePrice = 310;
           break;
-        case 'largeTruck':
+        case 'heavyTruck':
           lastZone = 10;
           priceForKm = 15;
           lastZonePrice = 430;
           break;
-        
-
-
-
         default:
           lastZone = 0;
           priceForKm = 0;
@@ -74,6 +74,7 @@ const MainPage = () => {
       setTransportLastZone(lastZone);
       setTransportPriceForKm(priceForKm);
       setTransportLastZonePrice(lastZonePrice);
+      setZonesPrices(zonesPrices);
     
     }, [transportName]);
 
@@ -89,15 +90,24 @@ useEffect(() => {
     return;
   }
 
-  // console.log("Distance:", distance);
-  // console.log("Last Zone:", transportLastZone);
-  // console.log("Price per Km:", transportPriceForKm);
-  // console.log("Last Zone Price:", transportLastZonePrice);
+  let calculatedPrice;
 
-  const calculatedPrice =
-    (distance - transportLastZone) * transportPriceForKm + transportLastZonePrice;
+  if(distance > 0 || distance <= 10){
+    calculatedPrice = zonesPrices[0];
+  }
+  else if(distance > 10  || distance <= 20){
+    calculatedPrice = zonesPrices[1]
+  }
+  else if(distance > 20  || distance <= 30){
+    calculatedPrice = zonesPrices[2]
+  }
+  else{
+    calculatedPrice = (distance - transportLastZone) * transportPriceForKm + transportLastZonePrice; 
+  }
 
- // console.log("Calculated Price:", calculatedPrice); // 🔴 Sprawdź wynik
+
+  
+
 
   if (!isNaN(calculatedPrice)) {
     setPrice(calculatedPrice);
@@ -120,7 +130,8 @@ useEffect(() => {
     const calculatedTransport = new Transport(
       transportLastZone,
       transportPriceForKm,
-      transportLastZonePrice
+      transportLastZonePrice,
+      zonesPrices
     );
 
     const calculatedPrice =
@@ -159,7 +170,7 @@ useEffect(() => {
                 <MenuItem color='inherit' value={'light'}>Lekki</MenuItem>
                 <MenuItem color='inherit' value={'medium'}>Średni</MenuItem>
                 <MenuItem color='inherit' value={'smallTruck'}>Mały HDS</MenuItem>
-                <MenuItem color='inherit' value={'MediumTruck'}>Średni HDS</MenuItem>
+                <MenuItem color='inherit' value={'mediumTruck'}>Średni HDS</MenuItem>
                 <MenuItem color='inherit' value={'heavyTruck'}>Duży HDS</MenuItem>
               </Select>
          </FormControl>
