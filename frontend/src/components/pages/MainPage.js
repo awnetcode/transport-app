@@ -48,27 +48,31 @@ const MainPage = () => {
           lastZone = 30;
           priceForKm = 12;
           lastZonePrice = 370;
-          zonesPrices = [85, 135, 185];
+          zonesPrices = [170, 270, 370];
           break;
         case 'smallTruck':
           lastZone = 10;
           priceForKm = 13;
           lastZonePrice = 250;
+          zonesPrices = [250];
           break;
         case 'mediumTruck':
           lastZone = 10;
           priceForKm = 13;
           lastZonePrice = 310;
+          zonesPrices = [310];
           break;
         case 'heavyTruck':
           lastZone = 10;
           priceForKm = 15;
           lastZonePrice = 430;
+          zonesPrices = [430];
           break;
         default:
           lastZone = 0;
           priceForKm = 0;
           lastZonePrice = 0;
+          zonesPrices = [];
       }
     
       setTransportLastZone(lastZone);
@@ -79,65 +83,90 @@ const MainPage = () => {
     }, [transportName]);
 
     // Teraz useEffect do obliczania ceny wykona się dopiero po aktualizacji wartości
-useEffect(() => {
-  if (distance <= 0) {
-    setPrice(0);
-    return;
-  }
-
-  if (!transportPriceForKm && !transportLastZonePrice) {
-    setPrice(0);
-    return;
-  }
-
-  let calculatedPrice;
-
-  if(distance > 0 || distance <= 10){
-    calculatedPrice = zonesPrices[0];
-  }
-  else if(distance > 10  || distance <= 20){
-    calculatedPrice = zonesPrices[1]
-  }
-  else if(distance > 20  || distance <= 30){
-    calculatedPrice = zonesPrices[2]
-  }
-  else{
-    calculatedPrice = (distance - transportLastZone) * transportPriceForKm + transportLastZonePrice; 
-  }
-
-
-  
-
-
-  if (!isNaN(calculatedPrice)) {
-    setPrice(calculatedPrice);
-  }
-}, [distance, transportLastZone, transportPriceForKm, transportLastZonePrice]);
+    useEffect(() => {
+      calculatePrice();
+    }, [transportName, distance]); 
 
  
    // Funkcja do obliczania ceny
    const calculatePrice = () => {
+    if (!transportName) {
+      setPrice(0);
+      return;
+    }
+  
+    let lastZone, priceForKm, lastZonePrice, zonesPrices;
+  
+    switch (transportName) {
+      case 'light':
+        lastZone = 30;
+        priceForKm = 8;
+        lastZonePrice = 185;
+        zonesPrices = [85, 135, 185];
+        break;
+      case 'medium':
+        lastZone = 30;
+        priceForKm = 12;
+        lastZonePrice = 370;
+        zonesPrices = [170, 270, 370];
+        break;
+      case 'smallTruck':
+        lastZone = 10;
+        priceForKm = 13;
+        lastZonePrice = 250;
+        zonesPrices = [250];
+        break;
+      case 'mediumTruck':
+        lastZone = 10;
+        priceForKm = 13;
+        lastZonePrice = 310;
+        zonesPrices = [310];
+        break;
+      case 'heavyTruck':
+        lastZone = 10;
+        priceForKm = 15;
+        lastZonePrice = 430;
+        zonesPrices = [430];
+        break;
+      default:
+        lastZone = 0;
+        priceForKm = 0;
+        lastZonePrice = 0;
+        zonesPrices = [];
+    }
+  
+    setTransportLastZone(lastZone);
+    setTransportPriceForKm(priceForKm);
+    setTransportLastZonePrice(lastZonePrice);
+    setZonesPrices(zonesPrices);
+  
     if (distance <= 0) {
       setPrice(0);
       return;
     }
-
-    if (!transportPriceForKm && !transportLastZonePrice) {
-      setPrice(0);
-      return;
+  
+    let calculatedPrice;
+  
+    if (transportName === 'light' || transportName === 'medium') {
+      // Transport lekki i średni (3 strefy)
+      if (distance <= 10) {
+        calculatedPrice = zonesPrices[0];
+      } else if (distance <= 20) {
+        calculatedPrice = zonesPrices[1];
+      } else if (distance <= 30) {
+        calculatedPrice = zonesPrices[2];
+      } else {
+        calculatedPrice = (distance - lastZone) * priceForKm + lastZonePrice;
+      }
+    } else {
+      // Transporty typu truck (tylko jedna strefa do 10 km)
+      if (distance <= 10) {
+        calculatedPrice = zonesPrices[0];
+      } else {
+        calculatedPrice = (distance - lastZone) * priceForKm + lastZonePrice;
+      }
     }
-
-    const calculatedTransport = new Transport(
-      transportLastZone,
-      transportPriceForKm,
-      transportLastZonePrice,
-      zonesPrices
-    );
-
-    const calculatedPrice =
-      (distance - calculatedTransport.lastZone) * calculatedTransport.priceForKm +
-      calculatedTransport.lastZonePrice;
-
+  
     if (!isNaN(calculatedPrice)) {
       setPrice(calculatedPrice);
     }
