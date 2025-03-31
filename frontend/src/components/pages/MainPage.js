@@ -19,16 +19,16 @@ const MainPage = () => {
   useEffect(() => {
     if (!transportName || distance <= 0) return setPrice('');
     
-    const { lastZone, priceForKm, lastZonePrice, zonesPrices } = transportData[transportName] || {};
+    const { lastZone, pricePerKm, lastZonePrice, zonesPrices } = transportData[transportName] || {};
     let calculatedPrice;
 
     if (zonesPrices.length === 3) {
       calculatedPrice = distance <= 10 ? zonesPrices[0] :
                        distance <= 20 ? zonesPrices[1] :
                        distance <= 30 ? zonesPrices[2] :
-                       (distance - lastZone) * priceForKm + lastZonePrice;
+                       (distance - lastZone) * pricePerKm + lastZonePrice;
     } else {
-      calculatedPrice = distance <= 10 ? zonesPrices[0] : (distance - lastZone) * priceForKm + lastZonePrice;
+      calculatedPrice = distance <= 10 ? zonesPrices[0] : (distance - lastZone) * pricePerKm + lastZonePrice;
     }
 
     setPrice(calculatedPrice);
