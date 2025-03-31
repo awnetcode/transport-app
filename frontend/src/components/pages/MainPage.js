@@ -8,175 +8,40 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { TextField } from '@mui/material';
 
-import Transport from '../../assets/data';
+import transportData from '../../assets/data';
 
 const MainPage = () => {
 
-    const [transportName, setTransportName] = useState('');
-    const [transportLastZone, setTransportLastZone] = useState(0);
-    const [transportLastZonePrice, setTransportLastZonePrice] = useState(0);
-    const [transportPriceForKm, setTransportPriceForKm] = useState(0);
-    const [zonesPrices, setZonesPrices] = useState([]);
-    const [distance, setDistance] = useState(0);
-    const [price, setPrice] = useState(0);
+  const [transportName, setTransportName] = useState('');
+  const [distance, setDistance] = useState(0);
+  const [price, setPrice] = useState(0);
 
-  // 🟢 Obsługa zmiany transportu (ustawia TYLKO nazwę)
-  const selectTransportOption = (event) => {
-    setTransportName(event.target.value);
-    calculatePrice();
-  };
-
-    // useEffect ustawia wartości po zmianie transportName
-    useEffect(() => {
-
-      calculatePrice();
-
-      if (!transportName) return;
-      let lastZone = Transport.lastZone;
-      let priceForKm = Transport.priceForKm;
-      let lastZonePrice = Transport.lastZonePrice;
-      let zonesPrices = Transport.zonesPrices;
+  useEffect(() => {
+    if (!transportName || distance <= 0) return setPrice('');
     
-      switch (transportName) {
-        case 'light':
-          lastZone = 30;
-          priceForKm = 8;
-          lastZonePrice = 185;
-          zonesPrices = [85, 135, 185];
-          break;
-        case 'medium':
-          lastZone = 30;
-          priceForKm = 12;
-          lastZonePrice = 370;
-          zonesPrices = [170, 270, 370];
-          break;
-        case 'smallTruck':
-          lastZone = 10;
-          priceForKm = 13;
-          lastZonePrice = 250;
-          zonesPrices = [250];
-          break;
-        case 'mediumTruck':
-          lastZone = 10;
-          priceForKm = 13;
-          lastZonePrice = 310;
-          zonesPrices = [310];
-          break;
-        case 'heavyTruck':
-          lastZone = 10;
-          priceForKm = 15;
-          lastZonePrice = 430;
-          zonesPrices = [430];
-          break;
-        default:
-          lastZone = 0;
-          priceForKm = 0;
-          lastZonePrice = 0;
-          zonesPrices = [];
-      }
-    
-      setTransportLastZone(lastZone);
-      setTransportPriceForKm(priceForKm);
-      setTransportLastZonePrice(lastZonePrice);
-      setZonesPrices(zonesPrices);
-    
-    }, [transportName]);
-
-    // Teraz useEffect do obliczania ceny wykona się dopiero po aktualizacji wartości
-    useEffect(() => {
-      calculatePrice();
-    }, [transportName, distance]); 
-
- 
-   // Funkcja do obliczania ceny
-   const calculatePrice = () => {
-    if (!transportName) {
-      setPrice(0);
-      return;
-    }
-  
-    let lastZone, priceForKm, lastZonePrice, zonesPrices;
-  
-    switch (transportName) {
-      case 'light':
-        lastZone = 30;
-        priceForKm = 8;
-        lastZonePrice = 185;
-        zonesPrices = [85, 135, 185];
-        break;
-      case 'medium':
-        lastZone = 30;
-        priceForKm = 12;
-        lastZonePrice = 370;
-        zonesPrices = [170, 270, 370];
-        break;
-      case 'smallTruck':
-        lastZone = 10;
-        priceForKm = 13;
-        lastZonePrice = 250;
-        zonesPrices = [250];
-        break;
-      case 'mediumTruck':
-        lastZone = 10;
-        priceForKm = 13;
-        lastZonePrice = 310;
-        zonesPrices = [310];
-        break;
-      case 'heavyTruck':
-        lastZone = 10;
-        priceForKm = 15;
-        lastZonePrice = 430;
-        zonesPrices = [430];
-        break;
-      default:
-        lastZone = 0;
-        priceForKm = 0;
-        lastZonePrice = 0;
-        zonesPrices = [];
-    }
-  
-    setTransportLastZone(lastZone);
-    setTransportPriceForKm(priceForKm);
-    setTransportLastZonePrice(lastZonePrice);
-    setZonesPrices(zonesPrices);
-  
-    if (distance <= 0) {
-      setPrice(0);
-      return;
-    }
-  
+    const { lastZone, priceForKm, lastZonePrice, zonesPrices } = transportData[transportName] || {};
     let calculatedPrice;
-  
-    if (transportName === 'light' || transportName === 'medium') {
-      // Transport lekki i średni (3 strefy)
-      if (distance <= 10) {
-        calculatedPrice = zonesPrices[0];
-      } else if (distance <= 20) {
-        calculatedPrice = zonesPrices[1];
-      } else if (distance <= 30) {
-        calculatedPrice = zonesPrices[2];
-      } else {
-        calculatedPrice = (distance - lastZone) * priceForKm + lastZonePrice;
-      }
+
+    if (zonesPrices.length === 3) {
+      calculatedPrice = distance <= 10 ? zonesPrices[0] :
+                       distance <= 20 ? zonesPrices[1] :
+                       distance <= 30 ? zonesPrices[2] :
+                       (distance - lastZone) * priceForKm + lastZonePrice;
     } else {
-      // Transporty typu truck (tylko jedna strefa do 10 km)
-      if (distance <= 10) {
-        calculatedPrice = zonesPrices[0];
-      } else {
-        calculatedPrice = (distance - lastZone) * priceForKm + lastZonePrice;
-      }
+      calculatedPrice = distance <= 10 ? zonesPrices[0] : (distance - lastZone) * priceForKm + lastZonePrice;
     }
-  
-    if (!isNaN(calculatedPrice)) {
-      setPrice(calculatedPrice);
-    }
-  };
+
+    setPrice(calculatedPrice);
+  }, [transportName, distance]);
 
   return (
     <Box sx={{
         display:'flex',
         alignItems:'center',
-        justifyContent:'space-around'
+        justifyContent:'space-around',
+        boxShadow:'var(--light-shadow)',
+        pt:'20px',
+        pb:'20px',
     }}>
         <Box sx={{ 
             minWidth: 120,
@@ -184,23 +49,21 @@ const MainPage = () => {
             color:'var(--cadet-gray)',
              }}>
           <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Rodzaj</InputLabel>
+              <InputLabel id="demo-simple-select-label"
+              >Rodzaj</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={transportName}
                 label="Transport"
-                onChange={selectTransportOption}
+                onChange={(e) => setTransportName(e.target.value)}
                 sx={{
-                    color:'var(--cadet-gray)',
-                    outlineOffset:'50px'
+                    color:'var(--cadet-gray)',  
                 }}
               >
-                <MenuItem color='inherit' value={'light'}>Lekki</MenuItem>
-                <MenuItem color='inherit' value={'medium'}>Średni</MenuItem>
-                <MenuItem color='inherit' value={'smallTruck'}>Mały HDS</MenuItem>
-                <MenuItem color='inherit' value={'mediumTruck'}>Średni HDS</MenuItem>
-                <MenuItem color='inherit' value={'heavyTruck'}>Duży HDS</MenuItem>
+              {Object.keys(transportData).map((key) => (
+            <MenuItem key={key} value={key}>{transportData[key].polishName}</MenuItem>
+          ))}
               </Select>
          </FormControl>
      </Box>
@@ -211,6 +74,9 @@ const MainPage = () => {
       autoComplete="off"
     >
       <TextField 
+        sx={{
+          '& .MuiInputBase-input': {color: 'var(--cadet-gray)', cursor:'pointer'}
+        }}
       id="outlined-basic" 
       label="Dystans" 
       variant="outlined"
@@ -227,6 +93,10 @@ const MainPage = () => {
       autoComplete="off"
     >
       <TextField 
+      sx={{
+        '& .MuiInputBase-input': {color: 'var(--cadet-gray)'},
+        pointerEvents:'none'
+      }}
       id="outlined-basic" 
       label="Wynik" 
       variant="outlined" 
