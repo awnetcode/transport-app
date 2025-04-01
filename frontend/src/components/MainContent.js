@@ -5,6 +5,7 @@ import Info from './pages/Info';
 import MainPage from './pages/MainPage';
 import TransportTable from './pages/TransportTable';
 import Bring from './pages/Bring';
+import WeightTable from './pages/WeightTable';
 
 const MainContent = ({content}) => {
     let pageContent;
@@ -22,7 +23,7 @@ const MainContent = ({content}) => {
             pageContent = <Info />;
             break;
         case 'weight':
-            pageContent = 'Strona Wagowa';
+            pageContent = <WeightTable />;
             break;
 
     default: pageContent = <MainPage/>;
