@@ -7,4 +7,18 @@
     heavyTruck: { polishName:'DużyHDS', lastZone: 10, pricePerKm: 15, lastZonePrice: 430, zonesPrices: [430] },
   };
 
+  const bringData = {
+    weightUnit:25,
+    groundFloor: 15,
+    Ifloor: 20,
+    IIfloor: 25,
+    IIIfloor: 30,
+    IVfloor: 35,
+
+    for25kg: 15,
+    forFloor: 5,
+}
+
   export default transportData;
+
+  export { bringData };

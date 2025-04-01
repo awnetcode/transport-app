@@ -15,9 +15,17 @@ import transportData from '../../assets/data';
 const calculatePrice = (type, distance) => {
   const { lastZone, pricePerKm, lastZonePrice, zonesPrices } = transportData[type];
 
+  // Sprawdzenie czy odległość mieści się w strefach
   if (distance <= lastZone) {
-    return zonesPrices[zonesPrices.length - 1] || lastZonePrice;
+    // Wybór odpowiedniej ceny na podstawie strefy
+    if (zonesPrices.length > 1) {
+      if (distance <= 10) return zonesPrices[0]; // Strefa 1 (do 10 km)
+      if (distance <= 20) return zonesPrices[1]; // Strefa 2 (do 20 km)
+      return zonesPrices[2]; // Strefa 3 (do 30 km)
+    }
+    return zonesPrices[0] || lastZonePrice; // Dla HDS, gdzie jest tylko 1 strefa
   }
+  // Poza ostatnią strefą liczymy cenę za każdy dodatkowy km
   return lastZonePrice + (distance - lastZone) * pricePerKm;
 };
 
@@ -30,14 +38,18 @@ const TransportTable = () => {
     <TableContainer component={Paper}
     sx={{
         bgcolor:'transparent',
-    }}
-    
-    >
-    <Table sx={{ 
         minWidth: 600,
+        maxHeight: '600px',
+        overflow: 'auto',
+        p:'20px',
+        scrollbarWidth:'none',
+        msOverflowStyle:'none',
+        '&::-webkit-scrollbar': { display: 'none' }
+    }}>
+    <Table sx={{ 
         color:'var(--cadet-gray)'
          }} aria-label="simple table">
-      <TableHead>
+      <TableHead sx={{ position: 'sticky', top: 0, bgcolor: 'var(--gunmetal)', zIndex: 1 }}>
         <TableRow sx={{color:'inherit'}}>
         <TableCell sx={{color:'inherit'}} >Odległość</TableCell>
             {transportTypes.map((type) => (
@@ -55,10 +67,10 @@ const TransportTable = () => {
               {distance}
             </TableCell>
             {transportTypes.map((type) => (
-            <TableCell sx={{color:'inherit'}} component="th" scope="row" align="right">
-            {calculatePrice(type, distance)}
+           <TableCell key={type} sx={{ color: 'inherit' }} align="right">
+           {calculatePrice(type, distance)}
            </TableCell>
-            ))}
+))}
           </TableRow>
         ))}
       </TableBody>

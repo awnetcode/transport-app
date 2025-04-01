@@ -9,7 +9,13 @@ import { Box } from '@mui/material';
 
 const Info = () => {
   return (
-    <Box >
+    <Box sx={{
+      maxHeight:'800px',
+      overflow:'auto',
+      scrollbarWidth:'none',
+      msOverflowStyle:'none',
+      '&::-webkit-scrollbar': { display: 'none' }
+    }}>
     <Accordion
      sx={{
       mb:'10px',
@@ -86,6 +92,28 @@ Jedno miejsce paletowe to 8 paczek styropianu lub wełny.<br/>
 Nie wysyłamy transportów na paletach CHEP.<br/>
 Palety z betonem komórkowym i kostką brukową mają wymiar 100x120cm.<br/>
 Palety z płytą G-K mają wymiar 120x260cm. Kaucja zwrotna 905024 to 147.60 zł.
+    </AccordionDetails>
+  </Accordion>
+  <Accordion sx={{
+           mb:'10px',
+           bgcolor:'transparent',
+           color:'var(--cadet-gray)'
+        }}>
+    <AccordionSummary
+      expandIcon={<ExpandMoreIcon sx={{color:'var(--cadet-gray)', fontSize:'32px'}} />}
+      aria-controls="panel2-content"
+      id="panel2-header"
+    >
+      <Typography component="span"><h2>Wniesienie</h2></Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+Wniesienie wbijamy pod kodem 80009.<br/>
+Do policzenia kosztu potrzebujemy wiedzieć ile towar waży i na które piętro wnieść.<br/>
+W przypadku gabarytów które się nie mieszczą do windy, np. płyty, blaty, profile, liczymy odpowiednie piętro bez windy.<br/>
+Dla gabarytów takich jak płyty G-K, OSB, blaty do wyliczonej wagowo ceny doliczamy +10zł za sztukę.<br/>
+Przy piecach, kominkach i grillach (parter, piwnica) cenę ustalamy indywidualnie z kierowcą.<br/>
+<br/>
+
     </AccordionDetails>
   </Accordion>
     </Box>

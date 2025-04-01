@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import Info from './pages/Info';
 import MainPage from './pages/MainPage';
 import TransportTable from './pages/TransportTable';
-//import TransportPriceTable from './pages/TransportPriceTable';
+import Bring from './pages/Bring';
 
 const MainContent = ({content}) => {
     let pageContent;
@@ -16,7 +16,7 @@ const MainContent = ({content}) => {
             pageContent = <TransportTable/>;
             break;
         case 'bring':
-            pageContent = 'Strona Wniesieniowa';
+            pageContent = <Bring />;
             break;
         case 'info':
             pageContent = <Info />;
