@@ -1,48 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { Box } from '@mui/material';
+
+
 import axios from 'axios';
 
-const WeightTable = () => {
-  const [data, setData] = useState([]); // Stan do przechowywania wyników zapytania
-  const [loading, setLoading] = useState(true); // Stan ładowania danych
-  const [error, setError] = useState(null); // Stan błędu
+const SearchComponent = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [data, setData] = useState([]);
 
-  useEffect(() => {
-    // Wysyłamy zapytanie do serwera
-    axios.get('188.210.221.51:3306') // Adres backendu
+  const handleSearch = () => {
+    axios.post('http://localhost:5000/api/search', { searchTerm })
       .then(response => {
-        setData(response.data); // Ustawiamy dane w stanie
-        setLoading(false); // Zmieniamy stan na załadowane
+        setData(response.data); // Ustawia dane z odpowiedzi
       })
-      .catch(err => {
-        setError('Błąd pobierania danych'); // W przypadku błędu
-        setLoading(false); // Zmieniamy stan na załadowane, mimo błędu
+      .catch(error => {
+        console.error('Błąd:', error);
       });
-  }, []); // Tablica zależności pusta, żeby zapytanie wysłało się tylko raz po załadowaniu komponentu
 
-  if (loading) return <p>Ładowanie danych...</p>;
-  if (error) return <p>{error}</p>;
+      console.log(data);
+  };
 
   return (
-    <table>
-      <thead>
-        <tr>
-          {/* Przykład nagłówków tabeli */}
-          <th>ID</th>
-          <th>Imię</th>
-          <th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            <td>{item.id}</td> {/* Załóżmy, że wynik zawiera kolumny 'id', 'imie' i 'email' */}
-            <td>{item.imie}</td>
-            <td>{item.email}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <Box>
+      <Box>
+      <input 
+        type="text" 
+        value={searchTerm} 
+        onChange={(e) => setSearchTerm(e.target.value)} 
+        placeholder="Wpisz frazę..."
+      />
+      <button onClick={handleSearch}>Szukaj</button>
+      </Box>
+
+      <TableContainer component={Paper}
+    sx={{
+        bgcolor:'transparent',
+        minWidth: 600,
+        maxHeight: '600px',
+        overflow: 'auto',
+        p:'20px',
+        scrollbarWidth:'none',
+        msOverflowStyle:'none',
+        '&::-webkit-scrollbar': { display: 'none' }
+    }}>
+    <Table sx={{ 
+        color:'var(--cadet-gray)'
+         }} aria-label="simple table">
+      <TableHead sx={{ position: 'sticky', top: 0, bgcolor: 'var(--gunmetal)', zIndex: 1 }}>
+        <TableRow sx={{color:'inherit'}}>
+        <TableCell sx={{color:'inherit'}} >lp</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="right">Użytkownik</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="right">Imię</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="right">Email</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="right">Hasło</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="right">Data</TableCell>
+           
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {data.map((item, index) =>(
+        
+          <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+            <TableCell key={item} sx={{color:'inherit'}} component="th" scope="row">{item.user_name}</TableCell>
+            <TableCell key={item} sx={{color:'inherit'}} component="th" scope="row">{item.first_name}</TableCell>
+            <TableCell key={item} sx={{color:'inherit'}} component="th" scope="row">{item.e_mail}</TableCell>
+            <TableCell key={item} sx={{color:'inherit'}} component="th" scope="row">{item.password}</TableCell>
+            <TableCell key={item} sx={{color:'inherit'}} component="th" scope="row">{item.data}</TableCell>
+          </TableRow>
+            ))}
+            
+  
+      </TableBody>
+    </Table>
+  </TableContainer>
+    </Box>
   );
 };
 
-export default WeightTable;
+export default SearchComponent;

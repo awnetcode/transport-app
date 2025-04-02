@@ -1,18 +1,25 @@
 const express = require('express');
 const mysql = require('mysql2');
+const cors = require('cors');
+
 const app = express();
 const port = 5000;
 
-const cors = require('cors');
-app.use(cors());
+app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
+app.use(express.json());
 
 // Połączenie z bazą danych MySQL
 const db = mysql.createConnection({
-  host: '188.210.221.51', // np. 'localhost'
+  host: 'localhost', // np. 'localhost'
   port: '3306',
-  user: 'srv83215_awnet";',
-  password: 'PaterNoster13',
-  database: 'srv83215_towary'
+  user: 'root',
+  database: 'claw99'
+  //-----baza--na--seohost--->
+  // host: '188.210.221.51',
+  // port: '3306',
+  // user: 'srv83215_kapitan',
+  // password: 'bombatrotylemjestem',
+  // database: 'srv83215_towary'
 });
 
 // Testowanie połączenia z bazą
@@ -24,14 +31,22 @@ db.connect((err) => {
   console.log('Połączono z bazą danych MySQL!');
 });
 
-// Endpoint do pobierania danych
-app.get('/api/data', (req, res) => {
-  db.query('SELECT * FROM tabela', (err, results) => {
+
+// Endpoint do pobierania danych z filtrem
+app.post('/api/search', (req, res) => {
+  const { searchTerm } = req.body; // Pobranie wartości wysłanej z frontendu
+
+  if (!searchTerm) {
+    return res.status(400).json({ error: 'Brak parametru searchTerm' });
+  }
+
+  const sqlQuery = 'SELECT * FROM users WHERE user_name LIKE ?';
+  db.query(sqlQuery, [`%${searchTerm}%`], (err, results) => {
     if (err) {
-      console.error('Błąd zapytania do bazy:', err);
-      return res.status(500).send('Błąd serwera');
+      console.error('Błąd zapytania:', err);
+      return res.status(500).json({ error: 'Błąd serwera' });
     }
-    res.json(results); // Zwrócenie wyników jako JSON
+    res.json(results);
   });
 });
 
