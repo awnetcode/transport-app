@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box } from '@mui/material';
+import { Box, TextField, Button } from '@mui/material';
 
 
 import axios from 'axios';
@@ -31,13 +31,50 @@ const SearchComponent = () => {
   return (
     <Box>
       <Box>
-      <input 
-        type="text" 
-        value={searchTerm} 
-        onChange={(e) => setSearchTerm(e.target.value)} 
-        placeholder="Wpisz frazę..."
+
+      {/* <input 
+        // type="text" 
+        // value={searchTerm} 
+        // onChange={(e) => setSearchTerm(e.target.value)} 
+        // placeholder="Wpisz frazę..."
       />
-      <button onClick={handleSearch}>Szukaj</button>
+      <button onClick={handleSearch}>Szukaj</button> */}
+      </Box>
+      <Box
+      sx={{
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center',
+        gap:'24px'
+      }}>
+        <TextField
+                sx={{
+                  '& .MuiInputBase-input': {color: 'var(--cadet-gray)', cursor:'pointer'},
+                  '& .MuiInputLabel-root': {color: 'var(--cadet-gray)'},
+                }}
+              id="outlined-basic" 
+              variant="outlined"
+              label="Casto lub Ean..." 
+              value={searchTerm} 
+              onChange={(e) => setSearchTerm(e.target.value)} 
+              >
+        </TextField>
+        <TextField
+                sx={{
+                  '& .MuiInputBase-input': {color: 'var(--cadet-gray)', cursor:'pointer'},
+                  '& .MuiInputLabel-root': {color: 'var(--cadet-gray)'},
+                }}
+              id="outlined-basic" 
+              label="Ilość..." 
+              variant="outlined"
+              onInput={(event) => {
+               
+              }} >
+        </TextField>
+        <Button
+        variant='outlined'
+        onClick={handleSearch}
+        >Szukaj</Button>
       </Box>
 
       <TableContainer component={Paper}
@@ -56,28 +93,22 @@ const SearchComponent = () => {
          }} aria-label="simple table">
       <TableHead sx={{ position: 'sticky', top: 0, bgcolor: 'var(--gunmetal)', zIndex: 1 }}>
         <TableRow sx={{color:'inherit'}}>
-        <TableCell sx={{color:'inherit'}} >lp</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="right">Użytkownik</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="right">Imię</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="right">Email</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="right">Hasło</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="right">Data</TableCell>
-           
+        <TableCell sx={{color:'inherit'}} align="left">CASTO</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="left">EAN</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="left">NAZWA</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="right">WAGA</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
         {data.map((item, index) =>(
         
-          <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-            <TableCell key={item} sx={{color:'inherit'}} component="th" scope="row">{item.user_name}</TableCell>
-            <TableCell key={item} sx={{color:'inherit'}} component="th" scope="row">{item.first_name}</TableCell>
-            <TableCell key={item} sx={{color:'inherit'}} component="th" scope="row">{item.e_mail}</TableCell>
-            <TableCell key={item} sx={{color:'inherit'}} component="th" scope="row">{item.password}</TableCell>
-            <TableCell key={item} sx={{color:'inherit'}} component="th" scope="row">{item.data}</TableCell>
+          <TableRow key={item} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+            <TableCell key={item.casto} sx={{color:'inherit'}} component="th" scope="row">{item.casto}</TableCell>
+            <TableCell key={item.ean} sx={{color:'inherit'}} component="th" scope="row">{index}=={item.ean}</TableCell>
+            <TableCell key={item.nazwa} sx={{color:'inherit'}} component="th" scope="row">{index}=={item.nazwa}</TableCell>
+            <TableCell key={item.waga} sx={{color:'inherit'}} component="th" scope="row" align="right">{index}=={item.waga}</TableCell>
           </TableRow>
             ))}
-            
-  
       </TableBody>
     </Table>
   </TableContainer>

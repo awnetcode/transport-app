@@ -40,7 +40,7 @@ app.post('/api/search', (req, res) => {
     return res.status(400).json({ error: 'Brak parametru searchTerm' });
   }
 
-  const sqlQuery = 'SELECT * FROM users WHERE user_name LIKE ?';
+  const sqlQuery = 'SELECT * FROM wagi_towarow WHERE casto LIKE ?';
   db.query(sqlQuery, [`%${searchTerm}%`], (err, results) => {
     if (err) {
       console.error('Błąd zapytania:', err);
