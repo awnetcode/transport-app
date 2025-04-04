@@ -7,38 +7,36 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, TextField, Button } from '@mui/material';
+import { Box, TextField, Button, Switch } from '@mui/material';
 
 
 import axios from 'axios';
 
 const SearchComponent = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [quantity, setQuantity] = useState(0);
   const [data, setData] = useState([]);
+  const [dataArray, setDataArray] = useState([]);
 
   const handleSearch = () => {
     axios.post('http://localhost:5000/api/search', { searchTerm })
       .then(response => {
         setData(response.data); // Ustawia dane z odpowiedzi
+        setDataArray(prevArray => [...prevArray, response.data]);
       })
       .catch(error => {
         console.error('Błąd:', error);
       });
-
-      console.log(data);
   };
+
+  const fillDataArray = () =>{
+   // setDataArray(prevArray => [...prevArray, data]);
+    console.log(dataArray);
+  }
 
   return (
     <Box>
       <Box>
-
-      {/* <input 
-        // type="text" 
-        // value={searchTerm} 
-        // onChange={(e) => setSearchTerm(e.target.value)} 
-        // placeholder="Wpisz frazę..."
-      />
-      <button onClick={handleSearch}>Szukaj</button> */}
       </Box>
       <Box
       sx={{
@@ -66,14 +64,20 @@ const SearchComponent = () => {
                 }}
               id="outlined-basic" 
               label="Ilość..." 
+              value={quantity}
               variant="outlined"
-              onInput={(event) => {
-               
+              onChange={(event) => { 
+                setQuantity(Number(event.target.value));
+                console.log(quantity);    
               }} >
         </TextField>
         <Button
         variant='outlined'
-        onClick={handleSearch}
+        onClick={() =>{
+          handleSearch(); 
+          fillDataArray()
+        }
+}
         >Szukaj</Button>
       </Box>
 
@@ -97,19 +101,54 @@ const SearchComponent = () => {
         <TableCell  sx={{color:'inherit'}} align="left">EAN</TableCell>
         <TableCell  sx={{color:'inherit'}} align="left">NAZWA</TableCell>
         <TableCell  sx={{color:'inherit'}} align="right">WAGA</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="left">ILOŚĆ</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="right">SUMA</TableCell>
+        <TableCell  sx={{color:'inherit'}} align="right">KASUJ<br/>LINIĘ</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {data.map((item, index) =>(
-        
-          <TableRow key={item} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-            <TableCell key={item.casto} sx={{color:'inherit'}} component="th" scope="row">{item.casto}</TableCell>
-            <TableCell key={item.ean} sx={{color:'inherit'}} component="th" scope="row">{index}=={item.ean}</TableCell>
-            <TableCell key={item.nazwa} sx={{color:'inherit'}} component="th" scope="row">{index}=={item.nazwa}</TableCell>
-            <TableCell key={item.waga} sx={{color:'inherit'}} component="th" scope="row" align="right">{index}=={item.waga}</TableCell>
-          </TableRow>
-            ))}
-      </TableBody>
+      {dataArray.map((row, index) => {console.log("row:", row);
+
+  return (
+    <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+      {row.map((item, i) => {
+        const itemEntries = Object.entries(item); // [[key1, value1], [key2, value2], ...]
+
+        return itemEntries.map(([key, value], idx) => (
+          <TableCell 
+          key={key + idx} 
+          sx={{ color: 'inherit' }} 
+          component="th" scope="row" 
+          align='center'>
+            {value}
+          </TableCell>
+        ));
+      })}
+      <TableCell sx={{ color: 'inherit' }}  align='center'>24</TableCell>
+      <TableCell sx={{ color: 'inherit' }} align='center'>1</TableCell>
+      <TableCell sx={{ color: 'inherit' }} align='right'>
+        <Switch/>
+        </TableCell>
+    </TableRow>
+  );
+})}
+<TableRow>
+  <TableCell sx={{ color: 'inherit' }} >RAZEM</TableCell>
+  <TableCell sx={{ color: 'inherit' }} ></TableCell>
+  <TableCell sx={{ color: 'inherit' }} ></TableCell>
+  <TableCell sx={{ color: 'inherit' }} ></TableCell>
+  <TableCell sx={{ color: 'inherit' }} ></TableCell>
+  <TableCell sx={{ color: 'inherit' }} align='right'>{}KG</TableCell>
+  <TableCell align='right'>
+  <Button
+        variant='outlined'
+        onClick={() =>{
+        }
+}
+        >usuń</Button>
+  </TableCell>
+</TableRow>
+     </TableBody>
     </Table>
   </TableContainer>
     </Box>
