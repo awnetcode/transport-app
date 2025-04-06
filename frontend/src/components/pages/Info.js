@@ -70,7 +70,7 @@ Jedna płyta OSB lub G-K zajmuje 3 miejsca paletowe.
    <h3>Bramy przesuwne</h3>
 Bramy przesuwne do ogrodzeń jeżdżą HDSami. Brama 6m jedzie małym HDS a 7m dużym.
    <h3>Szybki</h3>
-Transport szybki to transport lekki w pierwszej strefie, który jedzie w ciągu 2 godzin od zakupu. Aby zamówić szybki transport klient dostarcza towar do kasy budowlanej i tam zostawia dane. Szybki transport kosztuje 100 zł
+Transport szybki to transport lekki w pierwszej strefie, który jedzie w dniu zakupu. Aby zamówić szybki transport klient dostarcza towar do kasy budowlanej i tam zostawia dane. Szybki transport kosztuje tyle samo co lekki w pierwszej strefie.
     </AccordionDetails>
   </Accordion>
   <Accordion sx={{

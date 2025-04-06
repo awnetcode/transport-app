@@ -14,25 +14,56 @@ import axios from 'axios';
 
 const SearchComponent = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [quantity, setQuantity] = useState(0);
-  const [data, setData] = useState([]);
+  const [quantity, setQuantity] = useState(1);
   const [dataArray, setDataArray] = useState([]);
+  const [totalWeight, setTotalWeight] = useState(0);
 
-  const handleSearch = () => {
-    axios.post('http://localhost:5000/api/search', { searchTerm })
-      .then(response => {
-        setData(response.data); // Ustawia dane z odpowiedzi
-        setDataArray(prevArray => [...prevArray, response.data]);
-      })
-      .catch(error => {
-        console.error('Błąd:', error);
-      });
+  const handleSearch = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/search', { searchTerm });
+      return response.data; // tylko zwraca dane
+    } catch (error) {
+      console.error('Błąd:', error);
+      return null;
+    }
+  };
+  
+
+  const fillDataArray = async () => {
+    const responseData = await handleSearch();
+    if (!responseData) return;
+  
+    const rowWeight = parseInt(responseData[0].waga) * quantity;
+    const expandedResponse = {
+      ...responseData,
+      ilość: quantity,
+      suma: rowWeight,
+      active: true,
+      isRemoving: false,
+    };
+  
+    setDataArray(prevArray => {
+      const updated = [...prevArray, expandedResponse];
+      setTotalWeight(calculateTotalWeight(updated));
+      return updated;
+    });
+  
+    // Czyści pola formularza
+    setSearchTerm('');
+    setQuantity(1);
   };
 
-  const fillDataArray = () =>{
-   // setDataArray(prevArray => [...prevArray, data]);
-    console.log(dataArray);
-  }
+  const calculateTotalWeight = (array) => {
+    return array.reduce((sum, item) => sum + (parseFloat(item.suma) || 0), 0);
+  };
+  
+
+  const deleteTableRow = (rowIndex) => {
+    const updatedArray = [...dataArray];
+    updatedArray.splice(rowIndex, 1); // usuwa jeden element w danym indeksie
+    setTotalWeight(calculateTotalWeight(updatedArray));
+    setDataArray(updatedArray);
+  };
 
   return (
     <Box>
@@ -43,7 +74,8 @@ const SearchComponent = () => {
         display:'flex',
         alignItems:'center',
         justifyContent:'center',
-        gap:'24px'
+        gap:'24px',
+        mb: '24px'
       }}>
         <TextField
                 sx={{
@@ -67,15 +99,13 @@ const SearchComponent = () => {
               value={quantity}
               variant="outlined"
               onChange={(event) => { 
-                setQuantity(Number(event.target.value));
-                console.log(quantity);    
+                setQuantity(Number(event.target.value)); 
               }} >
         </TextField>
         <Button
         variant='outlined'
         onClick={() =>{
-          handleSearch(); 
-          fillDataArray()
+          fillDataArray();
         }
 }
         >Szukaj</Button>
@@ -107,48 +137,61 @@ const SearchComponent = () => {
         </TableRow>
       </TableHead>
       <TableBody>
-      {dataArray.map((row, index) => {console.log("row:", row);
-
-  return (
-    <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-      {row.map((item, i) => {
-        const itemEntries = Object.entries(item); // [[key1, value1], [key2, value2], ...]
-
-        return itemEntries.map(([key, value], idx) => (
-          <TableCell 
-          key={key + idx} 
-          sx={{ color: 'inherit' }} 
-          component="th" scope="row" 
-          align='center'>
-            {value}
-          </TableCell>
-        ));
-      })}
-      <TableCell sx={{ color: 'inherit' }}  align='center'>24</TableCell>
-      <TableCell sx={{ color: 'inherit' }} align='center'>1</TableCell>
-      <TableCell sx={{ color: 'inherit' }} align='right'>
-        <Switch/>
-        </TableCell>
+  {dataArray.map((row, index) => (
+    <TableRow key={index} sx={{ 
+    '&:last-child td, &:last-child th': { border: 0 },
+    opacity: row.isRemoving ? 0 : 1,
+    maxHeight: row.isRemoving ? 0 : '100px',
+    overflow: 'hidden',
+    transition: 'opacity 0.8s ease, max-height 0.8s ease',
+     }}>
+      <TableCell sx={{ color: 'inherit' }}>{row[0].ean}</TableCell>
+      <TableCell sx={{ color: 'inherit' }}>{row[0].casto}</TableCell>
+      <TableCell sx={{ color: 'inherit' }}>{row[0].nazwa}</TableCell>
+      <TableCell sx={{ color: 'inherit' }} align="right">{row.waga}</TableCell>
+      <TableCell sx={{ color: 'inherit' }}>{row.ilość}</TableCell>
+      <TableCell sx={{ color: 'inherit' }} align="right">{row.suma} KG</TableCell>
+      <TableCell sx={{ color: 'inherit' }} align="right">
+        <Switch
+          checked={row.active}
+          onChange={() => {
+            const updatedArray = [...dataArray];
+            updatedArray[index].active = false; // przesuwa w lewo
+            updatedArray[index].isRemoving = true;
+            setDataArray(updatedArray);
+        
+            setTimeout(() => {
+              deleteTableRow(index); // usuwa po 1.1s
+            }, 800);
+          }}
+        />
+      </TableCell>
     </TableRow>
-  );
-})}
-<TableRow>
-  <TableCell sx={{ color: 'inherit' }} >RAZEM</TableCell>
-  <TableCell sx={{ color: 'inherit' }} ></TableCell>
-  <TableCell sx={{ color: 'inherit' }} ></TableCell>
-  <TableCell sx={{ color: 'inherit' }} ></TableCell>
-  <TableCell sx={{ color: 'inherit' }} ></TableCell>
-  <TableCell sx={{ color: 'inherit' }} align='right'>{}KG</TableCell>
-  <TableCell align='right'>
-  <Button
+  ))}
+
+  {/* Wiersz podsumowania */}
+  <TableRow>
+    <TableCell sx={{ color: 'inherit' }}>RAZEM</TableCell>
+    <TableCell sx={{ color: 'inherit' }}></TableCell>
+    <TableCell sx={{ color: 'inherit' }}></TableCell>
+    <TableCell sx={{ color: 'inherit' }}></TableCell>
+    <TableCell sx={{ color: 'inherit' }}></TableCell>
+    <TableCell sx={{ color: totalWeight <= 1500 ?  'green' : 'red'}} align="right">
+      {totalWeight} KG
+    </TableCell>
+    <TableCell align="right">
+      <Button
         variant='outlined'
-        onClick={() =>{
-        }
-}
-        >usuń</Button>
-  </TableCell>
-</TableRow>
-     </TableBody>
+        onClick={() => {
+          setDataArray([]); // czyści całą tabelę
+        }}
+      >
+        Usuń wszystko
+      </Button>
+    </TableCell>
+  </TableRow>
+</TableBody>
+
     </Table>
   </TableContainer>
     </Box>
