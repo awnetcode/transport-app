@@ -42,6 +42,7 @@ const MainPage = () => {
         boxShadow:'var(--light-shadow)',
         pt:'20px',
         pb:'20px',
+        color:'white'
     }}>
         <Box sx={{ 
             minWidth: 120,
@@ -58,7 +59,10 @@ const MainPage = () => {
                 label="Transport"
                 onChange={(e) => setTransportName(e.target.value)}
                 sx={{
-                    color:'var(--cadet-gray)',  
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--cadet-gray)',
+                  },
+                  color: 'var(--cadet-gray)',
                 }}
               >
               {Object.keys(transportData).map((key) => (
@@ -75,7 +79,13 @@ const MainPage = () => {
     >
       <TextField 
         sx={{
-          '& .MuiInputBase-input': {color: 'var(--cadet-gray)', cursor:'pointer'}
+          '& .MuiInputBase-input': {
+            color: 'var(--cadet-gray)', cursor:'pointer'},
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'var(--cadet-gray)',
+            },
+            color: 'var(--cadet-gray)',
+        
         }}
       id="outlined-basic" 
       label="Dystans" 

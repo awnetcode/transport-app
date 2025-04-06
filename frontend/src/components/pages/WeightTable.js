@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,6 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box, TextField, Button, Switch } from '@mui/material';
 
+import WeightProgress from '../WeightProgress';
+
 
 import axios from 'axios';
 
@@ -17,6 +19,7 @@ const SearchComponent = () => {
   const [quantity, setQuantity] = useState(1);
   const [dataArray, setDataArray] = useState([]);
   const [totalWeight, setTotalWeight] = useState(0);
+  const [transportName, setTransportName] = useState('');
 
   const handleSearch = async () => {
     try {
@@ -56,6 +59,17 @@ const SearchComponent = () => {
   const calculateTotalWeight = (array) => {
     return array.reduce((sum, item) => sum + (parseFloat(item.suma) || 0), 0);
   };
+
+  const setWeighColor = (transportName) => {
+    switch (transportName) {
+      case ('Lekki Transport'): return '#2ecc71';  
+      case ('Średni Transport'): return '#a2d96a';
+      case ('Mały HDS'): return '#f1c40f';       
+      case ('Średni HDS'): return '#e67e22';       
+      case ('Duży HDS'): return '#e74c3c';       
+      default: return '#2ecc71';                 
+    }
+  };
   
 
   const deleteTableRow = (rowIndex) => {
@@ -64,6 +78,23 @@ const SearchComponent = () => {
     setTotalWeight(calculateTotalWeight(updatedArray));
     setDataArray(updatedArray);
   };
+
+    useEffect(() =>{
+        if(totalWeight > 0 && totalWeight <= 1500) {
+            setTransportName('Lekki Transport');
+        }else if(totalWeight > 0 && totalWeight >= 1500 && totalWeight <= 3000){
+            setTransportName('Średni Transport');
+        }else if(totalWeight >= 3000 && totalWeight <= 4000 ){
+            setTransportName('Mały HDS');
+        }else if(totalWeight >= 4000 && totalWeight <= 8000 ){
+            setTransportName('Średni HDS');
+        }else if(totalWeight >= 8000 && totalWeight <= 10000 ){
+            setTransportName('Duży HDS');
+        }else if(totalWeight > 10000){
+            setTransportName('Za dużo!');
+        }
+
+    },[totalWeight])
 
   return (
     <Box>
@@ -100,7 +131,11 @@ const SearchComponent = () => {
               variant="outlined"
               onChange={(event) => { 
                 setQuantity(Number(event.target.value)); 
-              }} >
+              }}
+              onFocus={()=>{
+                setQuantity('')
+              }}
+              >
         </TextField>
         <Button
         variant='outlined'
@@ -176,7 +211,9 @@ const SearchComponent = () => {
     <TableCell sx={{ color: 'inherit' }}></TableCell>
     <TableCell sx={{ color: 'inherit' }}></TableCell>
     <TableCell sx={{ color: 'inherit' }}></TableCell>
-    <TableCell sx={{ color: totalWeight <= 1500 ?  'green' : 'red'}} align="right">
+    <TableCell sx={{ 
+      color: setWeighColor(transportName)
+    }} align="right">
       {totalWeight} KG
     </TableCell>
     <TableCell align="right">
@@ -184,9 +221,10 @@ const SearchComponent = () => {
         variant='outlined'
         onClick={() => {
           setDataArray([]); // czyści całą tabelę
+          setTransportName('');
         }}
       >
-        Usuń wszystko
+        wyczyść
       </Button>
     </TableCell>
   </TableRow>
@@ -194,6 +232,7 @@ const SearchComponent = () => {
 
     </Table>
   </TableContainer>
+  <WeightProgress totalWeight={totalWeight} transportName={transportName}/>
     </Box>
   );
 };
