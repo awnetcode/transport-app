@@ -31,7 +31,7 @@ const SearchComponent = () => {
     }
   };
   
-
+//zapisuje w tablicy kolejne zapytania do bazy
   const fillDataArray = async () => {
     const responseData = await handleSearch();
     if (!responseData) return;
@@ -56,10 +56,12 @@ const SearchComponent = () => {
     setQuantity(1);
   };
 
+  //oblicza całkowitą wagę tabeli
   const calculateTotalWeight = (array) => {
     return array.reduce((sum, item) => sum + (parseFloat(item.suma) || 0), 0);
   };
 
+  //ustawia kolor tekstu dla pola całkowitej wagi
   const setWeighColor = (transportName) => {
     switch (transportName) {
       case ('Lekki Transport'): return '#2ecc71';  
@@ -71,13 +73,20 @@ const SearchComponent = () => {
     }
   };
   
-
+//usuwa wiersz tabeli po prezsunięciu switcha
   const deleteTableRow = (rowIndex) => {
     const updatedArray = [...dataArray];
     updatedArray.splice(rowIndex, 1); // usuwa jeden element w danym indeksie
     setTotalWeight(calculateTotalWeight(updatedArray));
     setDataArray(updatedArray);
   };
+
+//wysyła zapytanie po wciścięciu entera
+const handleKeyDown = (e) => {
+  if (e.key === 'Enter') {
+    fillDataArray();
+  }
+};
 
     useEffect(() =>{
         if(totalWeight > 0 && totalWeight <= 1500) {
@@ -117,7 +126,8 @@ const SearchComponent = () => {
               variant="outlined"
               label="Casto lub Ean..." 
               value={searchTerm} 
-              onChange={(e) => setSearchTerm(e.target.value)} 
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown} 
               >
         </TextField>
         <TextField
@@ -129,12 +139,9 @@ const SearchComponent = () => {
               label="Ilość..." 
               value={quantity}
               variant="outlined"
-              onChange={(event) => { 
-                setQuantity(Number(event.target.value)); 
-              }}
-              onFocus={()=>{
-                setQuantity('')
-              }}
+              onChange={(event) => {setQuantity(Number(event.target.value));}}
+              onFocus={()=>{setQuantity('');}}
+              onKeyDown={handleKeyDown}
               >
         </TextField>
         <Button
@@ -180,11 +187,11 @@ const SearchComponent = () => {
     overflow: 'hidden',
     transition: 'opacity 0.8s ease, max-height 0.8s ease',
      }}>
-      <TableCell sx={{ color: 'inherit' }}>{row[0].ean}</TableCell>
       <TableCell sx={{ color: 'inherit' }}>{row[0].casto}</TableCell>
+      <TableCell sx={{ color: 'inherit' }}>{row[0].ean}</TableCell>
       <TableCell sx={{ color: 'inherit' }}>{row[0].nazwa}</TableCell>
-      <TableCell sx={{ color: 'inherit' }} align="right">{row.waga}</TableCell>
-      <TableCell sx={{ color: 'inherit' }}>{row.ilość}</TableCell>
+      <TableCell sx={{ color: 'inherit' }} align="right">{row[0].waga}</TableCell>
+      <TableCell sx={{ color: 'inherit' }} align='center'>{row.ilość}</TableCell>
       <TableCell sx={{ color: 'inherit' }} align="right">{row.suma} KG</TableCell>
       <TableCell sx={{ color: 'inherit' }} align="right">
         <Switch
@@ -220,7 +227,7 @@ const SearchComponent = () => {
       <Button
         variant='outlined'
         onClick={() => {
-          setDataArray([]); // czyści całą tabelę
+          setDataArray([]);
           setTransportName('');
         }}
       >

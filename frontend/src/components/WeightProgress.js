@@ -14,35 +14,35 @@ const WeightProgress = ({totalWeight, transportName}) => {
             width:'36px',
             height:'24px',
             background:'#2ecc71',
-            outline: transportName === 'Lekki Transport' ? '3px solid white' : 'none'
+            outline: transportName === 'Lekki Transport' ? '2px solid white' : 'none'
         }}></Box>
         <Box
         sx={{
             width:'36px',
             height:'24px',
             background:'#a2d96a',
-            outline: transportName === 'Średni Transport' ? '3px solid white' : 'none'
+            outline: transportName === 'Średni Transport' ? '2px solid white' : 'none'
         }}></Box>
         <Box         
         sx={{
             width:'36px',
             height:'24px',
             background:'#f1c40f',
-            outline: transportName === 'Mały HDS' ? '3px solid white' : 'none'
+            outline: transportName === 'Mały HDS' ? '2px solid white' : 'none'
         }}></Box>
         <Box
         sx={{
             width:'36px',
             height:'24px',
             background:'#e67e22',
-            outline: transportName === 'Średni HDS' ? '3px solid white' : 'none'
+            outline: transportName === 'Średni HDS' ? '2px solid white' : 'none'
         }}></Box>
         <Box
         sx={{
             width:'36px',
             height:'24px',
             background:'#e74c3c',
-            outline: transportName === 'Duży HDS' ? '3px solid white' : 'none'
+            outline: transportName === 'Duży HDS' ? '2px solid white' : 'none'
         }}></Box>
         <Box>
             <Typography sx={{

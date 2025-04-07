@@ -47,12 +47,12 @@ export default function BasicTabs({setContent}) {
       top: 0,
       mb:{lg:'32px', sm:'10px'}
      }}>
-      <MenuIcon sx={{
+      {/* <MenuIcon sx={{
         fontSize:'3rem',
         position:'absolute',
         top:'10px',
         right:'10px'
-      }}/>
+      }}/> */}
       <Box sx={{ borderBottom: 0, borderColor: 'inherit' }}>
         <Tabs 
          orientation={isSmallScreen ? "vertical" : "horizontal"}

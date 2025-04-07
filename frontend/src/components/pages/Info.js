@@ -108,12 +108,11 @@ Palety z płytą G-K mają wymiar 120x260cm. Kaucja zwrotna 905024 to 147.60 zł
     </AccordionSummary>
     <AccordionDetails>
 Wniesienie wbijamy pod kodem 80009.<br/>
-Do policzenia kosztu potrzebujemy wiedzieć ile towar waży i na które piętro wnieść.<br/>
+Do policzenia ceny potrzebujemy wiedzieć ile towar waży i na które piętro wnieść.<br/>
 W przypadku gabarytów które się nie mieszczą do windy, np. płyty, blaty, profile, liczymy odpowiednie piętro bez windy.<br/>
 Dla gabarytów takich jak płyty G-K, OSB, blaty do wyliczonej wagowo ceny doliczamy +10zł za sztukę.<br/>
 Przy piecach, kominkach i grillach (parter, piwnica) cenę ustalamy indywidualnie z kierowcą.<br/>
 <br/>
-
     </AccordionDetails>
   </Accordion>
     </Box>

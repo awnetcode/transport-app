@@ -11,7 +11,6 @@ function App() {
     <div className="container">
       <Navigation setContent= {setContent}/>
       <MainContent content = {content}/>
-
     </div>
   );
 }

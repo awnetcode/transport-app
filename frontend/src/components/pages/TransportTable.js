@@ -49,7 +49,12 @@ const TransportTable = () => {
     <Table sx={{ 
         color:'var(--cadet-gray)'
          }} aria-label="simple table">
-      <TableHead sx={{ position: 'sticky', top: 0, bgcolor: 'var(--gunmetal)', zIndex: 1 }}>
+      <TableHead sx={{ 
+        position: 'sticky',
+        top: 0, 
+        bgcolor: 'var(--gunmetal)',
+        //outline:'3px solid var(--cadet-gray)', 
+        zIndex: 1 }}>
         <TableRow sx={{color:'inherit'}}>
         <TableCell sx={{color:'inherit'}} >Odległość</TableCell>
             {transportTypes.map((type) => (

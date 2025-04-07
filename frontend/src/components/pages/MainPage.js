@@ -51,7 +51,7 @@ const MainPage = () => {
              }}>
           <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label"
-              >Rodzaj</InputLabel>
+              >Transport</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -104,11 +104,12 @@ const MainPage = () => {
     >
       <TextField 
       sx={{
-        '& .MuiInputBase-input': {color: 'var(--cadet-gray)'},
-        pointerEvents:'none'
+        '& .MuiInputBase-input': {color: 'var(--cadet-gray)', textAlign:'center'},
+        pointerEvents:'none',
+        
       }}
       id="outlined-basic" 
-      label="Wynik" 
+      label="Cena" 
       variant="outlined" 
       value={price}
       />
