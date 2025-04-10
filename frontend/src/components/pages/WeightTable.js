@@ -23,7 +23,7 @@ const SearchComponent = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/search', { searchTerm });
+      const response = await axios.post('https://awnetcode.pl/NowyTransport-backend/', { searchTerm });
       return response.data; // tylko zwraca dane
     } catch (error) {
       console.error('Błąd:', error);

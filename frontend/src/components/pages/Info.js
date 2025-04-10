@@ -86,12 +86,16 @@ Transport szybki to transport lekki w pierwszej strefie, który jedzie w dniu za
       <Typography component="span"><h2>Palety</h2></Typography>
     </AccordionSummary>
     <AccordionDetails>
-Palety zwykłe i EURO mają wymiar 80x120cm. Kaucja zwrotna za palety EURO 44444 to 75 zł.<br/>
-Za KNAUF KNWO 931217 to 95.94 zł.<br/>
-Jedno miejsce paletowe to 8 paczek styropianu lub wełny.<br/>
+Palety zwykłe EURO, KNWO, CHEP mają wymiar 80x120cm.<br/>
+Jedno  miejsce paletowe to 8 paczek styropianu lub wełny.<br/>
 Nie wysyłamy transportów na paletach CHEP.<br/>
 Palety z betonem komórkowym i kostką brukową mają wymiar 100x120cm.<br/>
-Palety z płytą G-K mają wymiar 120x260cm. Kaucja zwrotna 905024 to 147.60 zł.
+Palety z płytą G-K mają wymiar 120x260cm.<br/><br/>
+Kaucje za palety:<br/>
+EURO - Kod: 44444 Kaucja: 75 zł<br/>
+KNAUF KNWO - Kod: 931217 Kaucja: 95.94 zł<br/>
+POLBRUK - Kod: 934777 Kaucja: 75 zł<br/>
+G-K - Kod: 44444 Kaucja: 147.60 zł
     </AccordionDetails>
   </Accordion>
   <Accordion sx={{

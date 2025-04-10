@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
 app.use(express.json());
@@ -34,14 +34,24 @@ db.connect((err) => {
 
 // Endpoint do pobierania danych z filtrem
 app.post('/api/search', (req, res) => {
-  const { searchTerm } = req.body; // Pobranie wartości wysłanej z frontendu
+  const { searchTerm } = req.body;
 
-  if (!searchTerm) {
-    return res.status(400).json({ error: 'Brak parametru searchTerm' });
+  // Sprawdzenie czy coś w ogóle zostało przesłane
+  if (!searchTerm || typeof searchTerm !== 'string') {
+    return res.status(400).json({ error: 'Brak lub nieprawidłowy parametr wyszukiwania' });
   }
 
-  const sqlQuery = 'SELECT * FROM wagi_towarow WHERE casto LIKE ?';
-  db.query(sqlQuery, [`%${searchTerm}%`], (err, results) => {
+  const sanitizedTerm = searchTerm.trim();
+
+  // Walidacja: tylko cyfry
+  const allowedLengths = [5, 6, 13];
+  if (!/^\d+$/.test(sanitizedTerm) || !allowedLengths.includes(sanitizedTerm.length)) {
+    return res.status(400).json({ error: 'Nieprawidłowy kod CASTO lub EAN' });
+  }
+
+  const sqlQuery = 'SELECT * FROM wagi_towarow WHERE casto = ? OR ean = ?';
+
+  db.query(sqlQuery, [sanitizedTerm, sanitizedTerm], (err, results) => {
     if (err) {
       console.error('Błąd zapytania:', err);
       return res.status(500).json({ error: 'Błąd serwera' });
