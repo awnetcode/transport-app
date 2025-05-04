@@ -23,8 +23,8 @@ const SearchComponent = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.post('https://awnetcode.pl/NowyTransport-backend/', { searchTerm });
-      return response.data; // tylko zwraca dane
+      const response = await axios.post('https://awnetcode.pl/NowyTransport-backend/api/search', { searchTerm });
+      return response.data; 
     } catch (error) {
       console.error('Błąd:', error);
       return null;
@@ -229,6 +229,7 @@ const handleKeyDown = (e) => {
         onClick={() => {
           setDataArray([]);
           setTransportName('');
+          setTotalWeight(0);
         }}
       >
         wyczyść

@@ -1,49 +1,59 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const path = require('path'); 
 
 const app = express();
-const port = process.env.PORT || 5000;
 
-app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
-app.use(express.json());
+app.use(cors({
+    origin: '*', // lub konkretny adres np. 'http://localhost:3000'
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
 
-// Połączenie z bazą danych MySQL
+
+// Middleware
+app.use(express.json()); // odczytuje dane JSON z requestu
+
+/*
+--------localhost na xampp
+    host: 'localhost',
+    port: '3306
+    user: 'root',
+    password: '',
+    database: 'claw99'
+
+*/
+
+// Konfiguracja bazy danych
 const db = mysql.createConnection({
-  host: 'localhost', // np. 'localhost'
-  port: '3306',
-  user: 'root',
-  database: 'claw99'
-  //-----baza--na--seohost--->
-  // host: '188.210.221.51',
-  // port: '3306',
-  // user: 'srv83215_kapitan',
-  // password: 'bombatrotylemjestem',
-  // database: 'srv83215_towary'
+    host: 'localhost',
+    user: 'srv83215_awnet',
+    password: 'PaterNoster13',
+    database: 'srv83215_towary'
 });
 
-// Testowanie połączenia z bazą
+// Połączenie z bazą
 db.connect((err) => {
-  if (err) {
-    console.error('Błąd połączenia z bazą danych:', err);
-    return;
-  }
-  console.log('Połączono z bazą danych MySQL!');
+    if (err) {
+        console.error('Błąd połączenia z bazą:', err);
+    } else {
+        console.log('Połączono z bazą danych');
+    }
 });
 
+// UTWÓRZ router z prefiksem
+const router = express.Router();
 
-// Endpoint do pobierania danych z filtrem
-app.post('/api/search', (req, res) => {
+router.post('/api/search', (req, res) => {
   const { searchTerm } = req.body;
 
-  // Sprawdzenie czy coś w ogóle zostało przesłane
   if (!searchTerm || typeof searchTerm !== 'string') {
     return res.status(400).json({ error: 'Brak lub nieprawidłowy parametr wyszukiwania' });
   }
 
   const sanitizedTerm = searchTerm.trim();
 
-  // Walidacja: tylko cyfry
   const allowedLengths = [5, 6, 13];
   if (!/^\d+$/.test(sanitizedTerm) || !allowedLengths.includes(sanitizedTerm.length)) {
     return res.status(400).json({ error: 'Nieprawidłowy kod CASTO lub EAN' });
@@ -60,6 +70,9 @@ app.post('/api/search', (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Serwer działa na porcie ${port}`);
+app.listen(3001, () => {
+  console.log('Serwer działa na porcie 3001');
 });
+
+// ✅ WAŻNE: dodaj router z prefiksem
+app.use('/NowyTransport-backend', router);
