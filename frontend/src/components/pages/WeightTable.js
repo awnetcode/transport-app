@@ -156,7 +156,7 @@ const handleKeyDown = (e) => {
       <TableContainer component={Paper}
     sx={{
         bgcolor:'transparent',
-        minWidth: 600,
+        minWidth: {lg:'600px', sm:'300px'},
         maxHeight: '600px',
         overflow: 'auto',
         p:'20px',

@@ -37,6 +37,7 @@ const MainPage = () => {
   return (
     <Box sx={{
         display:'flex',
+        flexWrap:'wrap',
         alignItems:'center',
         justifyContent:'space-around',
         boxShadow:'var(--light-shadow)',
@@ -46,7 +47,7 @@ const MainPage = () => {
     }}>
         <Box sx={{ 
             minWidth: 120,
-            maxWidth:{sm:'100%', lg:'300px'},
+            maxWidth:{sm:'100%', lg:'900px'},
             color:'var(--cadet-gray)',
              }}>
           <FormControl fullWidth>

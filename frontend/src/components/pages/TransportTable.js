@@ -38,27 +38,38 @@ const TransportTable = () => {
     <TableContainer component={Paper}
     sx={{
         bgcolor:'transparent',
-        minWidth: 600,
-        maxHeight: '600px',
-        overflow: 'auto',
-        p:'20px',
+        maxWidth:{xs:'100%', lg:'900px'},
+        maxHeight: {sm:'100vh', lg:'600px'},
+        overflowX: 'auto',
+        overflowY: 'scroll',
+        p:{xs:0, lg:'20px'},
         scrollbarWidth:'none',
         msOverflowStyle:'none',
         '&::-webkit-scrollbar': { display: 'none' }
     }}>
     <Table sx={{ 
-        color:'var(--cadet-gray)'
+        color:'var(--cadet-gray)',
+        tableLayout: 'fixed',
+        width: '100%' 
          }} aria-label="simple table">
       <TableHead sx={{ 
         position: 'sticky',
         top: 0, 
-        bgcolor: 'var(--gunmetal)',
-        //outline:'3px solid var(--cadet-gray)', 
+        bgcolor: 'var(--gunmetal)', 
         zIndex: 1 }}>
-        <TableRow sx={{color:'inherit'}}>
-        <TableCell sx={{color:'inherit'}} >Odległość</TableCell>
+        <TableRow sx={{
+          color:'inherit',
+          maxWidth:'100%'
+          }}>
+        <TableCell sx={{
+          color:'inherit',
+          fontSize:{xs:'10px', lg:'16px'}
+          }} align="center">Odległość</TableCell>
             {transportTypes.map((type) => (
-                <TableCell key={type} sx={{color:'inherit'}} align="right">{transportData[type].polishName}</TableCell>
+                <TableCell key={type} sx={{
+                  color:'inherit', 
+                  fontSize:{xs:'10px', lg:'16px'}
+                }} align="center">{transportData[type].polishName}</TableCell>
             ))}
         </TableRow>
       </TableHead>
@@ -68,11 +79,17 @@ const TransportTable = () => {
             key={distance}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
           >
-            <TableCell sx={{color:'inherit'}} component="th" scope="row">
+            <TableCell sx={{
+              color:'inherit',
+              fontSize:{xs:'10px', lg:'16px'}
+              }} align="center">
               {distance}
             </TableCell>
             {transportTypes.map((type) => (
-           <TableCell key={type} sx={{ color: 'inherit' }} align="right">
+           <TableCell key={type} sx={{
+             color: 'inherit',
+             fontSize:{xs:'10px', lg:'16px'}
+              }} align="center">
            {calculatePrice(type, distance)}
            </TableCell>
 ))}
