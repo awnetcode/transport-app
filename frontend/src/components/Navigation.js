@@ -31,11 +31,12 @@ CustomTabPanel.propTypes = {
 };
 
 
-
 export default function BasicTabs({setContent}) {
   const [value, setValue] = React.useState(0);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [menuVisible, setMenuVisible] = React.useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -45,25 +46,55 @@ export default function BasicTabs({setContent}) {
     <Box sx={{ width: '100%',
       position: 'absolute',
       top: 0,
-      mb:{lg:'32px', sm:'10px'}
+      mb:{lg:'32px', sm:'10px'},
+      background:'var(--gunmetal)',
+      zIndex:'5'
      }}>
-      {/* <MenuIcon sx={{
+      {menuVisible && (
+      <MenuIcon sx={{
         fontSize:'3rem',
         position:'absolute',
         top:'10px',
-        right:'10px'
-      }}/> */}
+        right:'10px',
+        zIndex:'10',
+        cursor:'pointer',
+        display: { xs: 'block', sm: 'block', md: 'none' } 
+      }}
+      onClick={() => setMenuVisible(!menuVisible)}
+      /> 
+      )}
       <Box sx={{ borderBottom: 0, borderColor: 'inherit' }}>
+        {(menuVisible === false || !isSmallScreen) && ( 
         <Tabs 
          orientation={isSmallScreen ? "vertical" : "horizontal"}
          value={value} onChange={handleChange} aria-label="basic tabs example"
+         sx={{
+          transition:'all .2s linear',
+          boxShadow: isSmallScreen ? 5 : 0,
+         }}
          >
-          <Tab sx={{color: 'inherit'}} label="Główna" onClick={()=>setContent('main')}/>
-          <Tab sx={{color:'inherit'}} label="Transport" onClick={()=>setContent('transport')}/>
-          <Tab sx={{color:'inherit'}} label="Wniesienie" onClick={()=>setContent('bring')}/>
-          <Tab sx={{color:'inherit'}} label="Info" onClick={()=>setContent('info')}/>
-          <Tab sx={{color:'inherit'}} label="Waga" onClick={()=>setContent('weight')}/>
+          <Tab sx={{color: 'inherit'}} label="Główna" onClick={()=>{
+            setContent('main');
+            setMenuVisible(!menuVisible);
+            }}/>
+          <Tab sx={{color:'inherit'}} label="Transport" onClick={()=>{
+            setContent('transport');
+            setMenuVisible(!menuVisible);
+            }}/>
+          <Tab sx={{color:'inherit'}} label="Wniesienie" onClick={()=>{
+            setContent('bring');
+            setMenuVisible(!menuVisible);
+            }}/>
+          <Tab sx={{color:'inherit'}} label="Info" onClick={()=>{
+            setContent('info');
+            setMenuVisible(!menuVisible);
+            }}/>
+          <Tab sx={{color:'inherit'}} label="Waga" onClick={()=>{
+            setContent('weight');
+            setMenuVisible(!menuVisible);
+            }}/>
         </Tabs>
+        )}
       </Box>
     </Box>
   );

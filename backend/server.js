@@ -26,20 +26,14 @@ app.use(express.json()); // odczytuje dane JSON z requestu
 */
 
 // Konfiguracja bazy danych
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'srv83215_awnet',
-    password: 'PaterNoster13',
-    database: 'srv83215_towary'
-});
-
-// Połączenie z bazą
-db.connect((err) => {
-    if (err) {
-        console.error('Błąd połączenia z bazą:', err);
-    } else {
-        console.log('Połączono z bazą danych');
-    }
+const db = mysql.createPool({
+  host: 'localhost',
+  user: 'srv83215_awnet',
+  password: 'PaterNoster13',
+  database: 'srv83215_towary',
+  waitForConnections: true,
+  connectionLimit: 20,
+  queueLimit: 0
 });
 
 // UTWÓRZ router z prefiksem
@@ -64,7 +58,7 @@ router.post('/api/search', (req, res) => {
   db.query(sqlQuery, [sanitizedTerm, sanitizedTerm], (err, results) => {
     if (err) {
       console.error('Błąd zapytania:', err);
-      return res.status(500).json({ error: 'Błąd serwera' });
+      return res.status(500).json({ error: 'Błąd serwera', details: err.message });
     }
     res.json(results);
   });
