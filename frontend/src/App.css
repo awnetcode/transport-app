@@ -7,7 +7,9 @@
   --gunmetal: #22333B;
   --cadet-gray: #A5ABAF;
   --app-link: #61dafb;
-  --light-shadow: 0 2px 3px 1px #171515;
+  --light-shadow: 0 0 6px 3px var(--active-blue);
+  /* --light-shadow: 0 2px 3px 1px #171515; */
+  --active-blue: #1976d2;
 }
 
 .container{
@@ -15,13 +17,11 @@
   min-height: 100vh;
   background-color: #22333B;
   color: #A5ABAF;
-  /*font-family: 'Cormorant Garamond', serif;*/
   font-size: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }

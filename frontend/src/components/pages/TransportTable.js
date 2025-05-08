@@ -37,15 +37,18 @@ const TransportTable = () => {
   return (
     <TableContainer component={Paper}
     sx={{
+      mt:{lg:'0', xs:'60px'},
+      boxShadow:{lg:'var(--light-shadow)', xs:'none'},
         bgcolor:'transparent',
-        maxWidth:{xs:'100%', lg:'900px'},
+        maxWidth:{xs:'100%', lg:'80%'},
+        m:'0 auto',
         maxHeight: {sm:'100vh', lg:'600px'},
         overflowX: 'auto',
         overflowY: 'scroll',
         p:{xs:0, lg:'20px'},
         scrollbarWidth:'none',
         msOverflowStyle:'none',
-        '&::-webkit-scrollbar': { display: 'none' }
+        '&::-webkit-scrollbar': { display: 'none' },
     }}>
     <Table sx={{ 
         color:'var(--cadet-gray)',

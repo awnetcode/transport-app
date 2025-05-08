@@ -6,7 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { TextField } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 
 import transportData from '../../assets/data';
 
@@ -35,12 +35,23 @@ const MainPage = () => {
   }, [transportName, distance]);
 
   return (
+  <Box sx={{
+    maxWidth:{lg:'70%', md:'80%', xs:'90%'},
+    m:'0 auto',
+    display:'flex',
+    flexDirection:'column',
+    alignItems:'center',
+    boxShadow:{lg:'var(--light-shadow)', xs:'none'},
+    p:'24px',
+    gap:'24px'
+  }}>
+
     <Box sx={{
+      width:'100%',
         display:'flex',
         flexWrap:'wrap',
         alignItems:'center',
-        justifyContent:'space-around',
-        boxShadow:'var(--light-shadow)',
+        justifyContent:'space-around', 
         pt:'20px',
         pb:'20px',
         color:'white'
@@ -97,17 +108,10 @@ const MainPage = () => {
       } } 
       />
     </Box>
-    <Box
-      component="form"
-      sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
-      noValidate
-      autoComplete="off"
-    >
       <TextField 
       sx={{
         '& .MuiInputBase-input': {color: 'var(--cadet-gray)', textAlign:'center'},
-        pointerEvents:'none',
-        
+        pointerEvents:'none',    
       }}
       id="outlined-basic" 
       label="Cena" 
@@ -115,7 +119,16 @@ const MainPage = () => {
       value={price}
       />
     </Box>
-    </Box>
+    <Button variant='outlined'
+      href="https://www.google.com/maps/dir/Castorama,+Narodowych+Si%C5%82+Zbrojnych+13,+15-690+Bia%C5%82ystok//@53.147964,23.006565,11z/data=!4m9!4m8!1m5!1m1!1s0x471ffc977b45eebf:0x7c51add8e625e61f!2m2!1d23.0766045!2d53.1478819!1m0!3e0?hl=pl&entry=ttu&g_ep=EgoyMDI1MDUwNi4wIKXMDSoJLDEwMjExNDUzSAFQAw%3D%3D" 
+      target="_blank" 
+      rel="noopener noreferrer"
+     sx={{
+      justifySelf:'center',
+      maxWidth:'100px'
+    }}>Mapa</Button>
+  </Box>
+
   )
 }
 

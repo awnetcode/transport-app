@@ -30,8 +30,7 @@ const MainContent = ({content}) => {
     }
   return (
     <Box sx={{
-        width:{lg:'70%', sm:'100%'},
-        
+        width:{lg:'70%', sm:'100%'},  
     }}>
         {pageContent}
     </Box>

@@ -9,6 +9,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box, TextField, Button, Switch } from '@mui/material';
 
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import WeightProgress from '../WeightProgress';
 
 
@@ -20,6 +23,9 @@ const SearchComponent = () => {
   const [dataArray, setDataArray] = useState([]);
   const [totalWeight, setTotalWeight] = useState(0);
   const [transportName, setTransportName] = useState('');
+
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleSearch = async () => {
     try {
@@ -36,7 +42,7 @@ const SearchComponent = () => {
     const responseData = await handleSearch();
     if (!responseData) return;
   
-    const rowWeight = parseInt(responseData[0].waga) * quantity;
+    const rowWeight = parseFloat(responseData[0].waga.replace(",", ".")) * quantity;
     const expandedResponse = {
       ...responseData,
       ilość: quantity,
@@ -58,7 +64,7 @@ const SearchComponent = () => {
 
   //oblicza całkowitą wagę tabeli
   const calculateTotalWeight = (array) => {
-    return array.reduce((sum, item) => sum + (parseFloat(item.suma) || 0), 0);
+    return array.reduce((sum, item) => sum + (parseFloat(item.suma) || 0), 0).toFixed(1);
   };
 
   //ustawia kolor tekstu dla pola całkowitej wagi
@@ -106,12 +112,18 @@ const handleKeyDown = (e) => {
     },[totalWeight])
 
   return (
-    <Box>
-      <Box>
-      </Box>
+    <Box sx={{ 
+      p:'10px',
+      overflowX: 'auto',
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',
+      '&::-webkit-scrollbar': { display: 'none' }
+     }}>
       <Box
       sx={{
         display:'flex',
+        flexWrap:'wrap',
+        flexDirection: { xs: 'column', sm: 'row' },
         alignItems:'center',
         justifyContent:'center',
         gap:'24px',
@@ -155,27 +167,57 @@ const handleKeyDown = (e) => {
 
       <TableContainer component={Paper}
     sx={{
-        bgcolor:'transparent',
-        minWidth: {lg:'600px', sm:'300px'},
-        maxHeight: '600px',
-        overflow: 'auto',
-        p:'20px',
-        scrollbarWidth:'none',
-        msOverflowStyle:'none',
-        '&::-webkit-scrollbar': { display: 'none' }
+      bgcolor:'transparent',
+      maxWidth: '100%',
+      overflowX: 'auto',
+      p: '10px',
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',
+      '&::-webkit-scrollbar': { display: 'none' },
+      
     }}>
     <Table sx={{ 
-        color:'var(--cadet-gray)'
+        color:'var(--cadet-gray)',
+        tableLayout: 'fixed',
+        width:'100%'
          }} aria-label="simple table">
       <TableHead sx={{ position: 'sticky', top: 0, bgcolor: 'var(--gunmetal)', zIndex: 1 }}>
         <TableRow sx={{color:'inherit'}}>
-        <TableCell sx={{color:'inherit'}} align="left">CASTO</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="left">EAN</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="left">NAZWA</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="right">WAGA</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="left">ILOŚĆ</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="right">SUMA</TableCell>
-        <TableCell  sx={{color:'inherit'}} align="right">KASUJ<br/>LINIĘ</TableCell>
+  {!isSmallScreen && (
+    <TableCell sx={{
+      color:'inherit',
+      fontSize:{xs:'10px', lg:'16px'},
+      }}>CASTO</TableCell>
+  )}
+  {!isSmallScreen && (
+        <TableCell  sx={{
+          color:'inherit',
+          fontSize:{xs:'10px', lg:'16px'},
+          }}>EAN</TableCell>
+          )}
+        <TableCell  sx={{
+          color:'inherit',
+          fontSize:{xs:'10px', lg:'16px'},
+          }}>NAZWA</TableCell>
+
+  {!isSmallScreen && (
+    <TableCell  sx={{
+      color:'inherit',
+      fontSize:{xs:'10px', lg:'16px'},
+      }}>WAGA</TableCell>
+  )}
+        <TableCell  sx={{
+          color:'inherit',
+          fontSize:{xs:'10px', lg:'16px'},
+          }}>ILOŚĆ</TableCell>
+        <TableCell  sx={{
+          color:'inherit',
+          fontSize:{xs:'10px', lg:'16px'},
+          }}>SUMA</TableCell>
+        <TableCell  sx={{
+          color:'inherit',
+          fontSize:{xs:'10px', lg:'16px'},
+          }}>KASUJ<br/>LINIĘ</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -187,13 +229,19 @@ const handleKeyDown = (e) => {
     overflow: 'hidden',
     transition: 'opacity 0.8s ease, max-height 0.8s ease',
      }}>
-      <TableCell sx={{ color: 'inherit' }}>{row[0].casto}</TableCell>
-      <TableCell sx={{ color: 'inherit' }}>{row[0].ean}</TableCell>
-      <TableCell sx={{ color: 'inherit' }}>{row[0].nazwa}</TableCell>
-      <TableCell sx={{ color: 'inherit' }} align="right">{row[0].waga}</TableCell>
-      <TableCell sx={{ color: 'inherit' }} align='center'>{row.ilość}</TableCell>
-      <TableCell sx={{ color: 'inherit' }} align="right">{row.suma} KG</TableCell>
-      <TableCell sx={{ color: 'inherit' }} align="right">
+      {!isSmallScreen && (
+        <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }}>{row[0].casto}</TableCell> 
+        )}
+      {!isSmallScreen && (
+        <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }}>{row[0].ean}</TableCell> 
+        )}
+      {!isSmallScreen && (
+        <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }} >{row[0].waga}</TableCell>
+      )}
+      <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }}>{row[0].nazwa}</TableCell>
+      <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }} >{row.ilość}</TableCell>
+      <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }} >{row.suma} KG</TableCell>
+      <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }} >
         <Switch
           checked={row.active}
           onChange={() => {
@@ -214,16 +262,22 @@ const handleKeyDown = (e) => {
   {/* Wiersz podsumowania */}
   <TableRow>
     <TableCell sx={{ color: 'inherit' }}>RAZEM</TableCell>
-    <TableCell sx={{ color: 'inherit' }}></TableCell>
-    <TableCell sx={{ color: 'inherit' }}></TableCell>
-    <TableCell sx={{ color: 'inherit' }}></TableCell>
+    {!isSmallScreen && (
+      <TableCell sx={{ color: 'inherit' }}></TableCell>
+    )}
+    {!isSmallScreen && (
+      <TableCell sx={{ color: 'inherit' }}></TableCell>
+    )}
+    {!isSmallScreen && (
+      <TableCell sx={{ color: 'inherit' }}></TableCell>
+    )}
     <TableCell sx={{ color: 'inherit' }}></TableCell>
     <TableCell sx={{ 
       color: setWeighColor(transportName)
-    }} align="right">
+    }}>
       {totalWeight} KG
     </TableCell>
-    <TableCell align="right">
+    <TableCell >
       <Button
         variant='outlined'
         onClick={() => {

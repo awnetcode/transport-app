@@ -10,12 +10,14 @@ import { Box } from '@mui/material';
 const Info = () => {
   return (
     <Box sx={{
+      mt:{lg:'0', xs:'60px'},
+      boxShadow:{lg:'var(--light-shadow)', xs:'none'},
       maxHeight:'800px',
       overflow:'auto',
       scrollbarWidth:'none',
       msOverflowStyle:'none',
-      '&::-webkit-scrollbar': { display: 'none' }
-    }}>
+      '&::-webkit-scrollbar': { display: 'none' },
+      }}>
     <Accordion
      sx={{
       mb:'10px',
@@ -47,7 +49,7 @@ Przy realizacji transportu nie generują się dane na karcie drogowej oraz czest
          sx={{
           mb:'10px',
           bgcolor:'transparent',
-          color:'var(--cadet-gray)'
+          color:'var(--cadet-gray)',
         }}>
     <AccordionSummary
       expandIcon={<ExpandMoreIcon sx={{color:'var(--cadet-gray)', fontSize:'32px'}} />}
@@ -64,7 +66,7 @@ Przez jedno miejsce paletowe rozumiemy prostokąt o wymiarach 80 x 120 cm.<br/>
 Na jedno miejsce paletowe wchodzi 8 paczek styropianu lub wełny.
 Jedna płyta OSB lub G-K zajmuje 3 miejsca paletowe.
     <h3>HDS</h3>
- Mały HDS to maksymalnie cztery miejsca paletowe o łącznej wadze nie większej niż 4t. W przypadku gdy klient zdejmuje towar z palet ręcznie, każda rozpoczęta godzina rozładunku to   200 zł do ceny transportu.<br/>
+ Mały HDS to maksymalnie cztery miejsca paletowe o łącznej wadze nie większej niż 5t. W przypadku gdy klient zdejmuje towar z palet ręcznie, każda rozpoczęta godzina rozładunku to   200 zł do ceny transportu.<br/>
  Średni HDS to maksymalnie sześć miejsc paletowych o łącznej wadze nie większej niż 8t.<br/>
   Duży HDS to maksymalnie dziesięć miejsc paletowych o łącznej wadze nie większej niż 10t. HDSy umawiamy telefonicznie z kierowcą.
    <h3>Bramy przesuwne</h3>
@@ -95,7 +97,7 @@ Kaucje za palety:<br/>
 EURO - Kod: 44444 Kaucja: 75 zł<br/>
 KNAUF KNWO - Kod: 931217 Kaucja: 95.94 zł<br/>
 POLBRUK - Kod: 934777 Kaucja: 75 zł<br/>
-G-K - Kod: 44444 Kaucja: 147.60 zł
+G-K - Kod: 905024 Kaucja: 147.60 zł
     </AccordionDetails>
   </Accordion>
   <Accordion sx={{
