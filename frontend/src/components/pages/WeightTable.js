@@ -93,24 +93,37 @@ const handleKeyDown = (e) => {
     fillDataArray();
   }
 };
+//ustala nazwę transportu w oparciu o wagę
+const determineTransportName = (weight) => {
+  if (weight <= 1500) return 'Lekki Transport';
+  if (weight <= 3000) return 'Średni Transport';
+  if (weight <= 4000) return 'Mały HDS';
+  if (weight <= 8000) return 'Średni HDS';
+  if (weight <= 10000) return 'Duży HDS';
+  return 'Za dużo!';
+};
 
     useEffect(() =>{
-        if(totalWeight > 0 && totalWeight <= 1500) {
-            setTransportName('Lekki Transport');
-        }else if(totalWeight > 0 && totalWeight >= 1500 && totalWeight <= 3000){
-            setTransportName('Średni Transport');
-        }else if(totalWeight >= 3000 && totalWeight <= 4000 ){
-            setTransportName('Mały HDS');
-        }else if(totalWeight >= 4000 && totalWeight <= 8000 ){
-            setTransportName('Średni HDS');
-        }else if(totalWeight >= 8000 && totalWeight <= 10000 ){
-            setTransportName('Duży HDS');
-        }else if(totalWeight > 10000){
-            setTransportName('Za dużo!');
-        }
-
+      setTransportName(determineTransportName(totalWeight));
     },[totalWeight])
 
+//powtarzające się style sx:-----------------------------------
+    const textFieldSx = {
+      '& .MuiInputBase-input': {color: 'var(--cadet-gray)', cursor:'pointer'},
+      '& .MuiInputLabel-root': {color: 'var(--cadet-gray)'},
+    };
+
+    const tableCellSx = {
+      color: 'inherit',
+      fontSize: { xs: '8px', md: '12px', lg:'14px'},
+      wordWrap: 'break-word'
+    };
+//powtarzający się warunek renderowania:---------------------------
+const ConditionalCell = ({ children }) => (
+  !isSmallScreen ? <TableCell sx={tableCellSx}>{children}</TableCell> : null
+);
+
+//-----------------------------------------------------------------
   return (
     <Box sx={{ 
       p:'10px',
@@ -129,11 +142,7 @@ const handleKeyDown = (e) => {
         gap:'24px',
         mb: '24px'
       }}>
-        <TextField
-                sx={{
-                  '& .MuiInputBase-input': {color: 'var(--cadet-gray)', cursor:'pointer'},
-                  '& .MuiInputLabel-root': {color: 'var(--cadet-gray)'},
-                }}
+        <TextField sx={textFieldSx}
               id="outlined-basic" 
               variant="outlined"
               label="Casto lub Ean..." 
@@ -142,11 +151,7 @@ const handleKeyDown = (e) => {
               onKeyDown={handleKeyDown} 
               >
         </TextField>
-        <TextField
-                sx={{
-                  '& .MuiInputBase-input': {color: 'var(--cadet-gray)', cursor:'pointer'},
-                  '& .MuiInputLabel-root': {color: 'var(--cadet-gray)'},
-                }}
+        <TextField sx={textFieldSx}
               id="outlined-basic" 
               label="Ilość..." 
               value={quantity}
@@ -160,11 +165,8 @@ const handleKeyDown = (e) => {
         variant='outlined'
         onClick={() =>{
           fillDataArray();
-        }
-}
-        >Szukaj</Button>
+        }}>Szukaj</Button>
       </Box>
-
       <TableContainer component={Paper}
     sx={{
       bgcolor:'transparent',
@@ -174,7 +176,6 @@ const handleKeyDown = (e) => {
       scrollbarWidth: 'none',
       msOverflowStyle: 'none',
       '&::-webkit-scrollbar': { display: 'none' },
-      
     }}>
     <Table sx={{ 
         color:'var(--cadet-gray)',
@@ -183,41 +184,13 @@ const handleKeyDown = (e) => {
          }} aria-label="simple table">
       <TableHead sx={{ position: 'sticky', top: 0, bgcolor: 'var(--gunmetal)', zIndex: 1 }}>
         <TableRow sx={{color:'inherit'}}>
-  {!isSmallScreen && (
-    <TableCell sx={{
-      color:'inherit',
-      fontSize:{xs:'10px', lg:'16px'},
-      }}>CASTO</TableCell>
-  )}
-  {!isSmallScreen && (
-        <TableCell  sx={{
-          color:'inherit',
-          fontSize:{xs:'10px', lg:'16px'},
-          }}>EAN</TableCell>
-          )}
-        <TableCell  sx={{
-          color:'inherit',
-          fontSize:{xs:'10px', lg:'16px'},
-          }}>NAZWA</TableCell>
-
-  {!isSmallScreen && (
-    <TableCell  sx={{
-      color:'inherit',
-      fontSize:{xs:'10px', lg:'16px'},
-      }}>WAGA</TableCell>
-  )}
-        <TableCell  sx={{
-          color:'inherit',
-          fontSize:{xs:'10px', lg:'16px'},
-          }}>ILOŚĆ</TableCell>
-        <TableCell  sx={{
-          color:'inherit',
-          fontSize:{xs:'10px', lg:'16px'},
-          }}>SUMA</TableCell>
-        <TableCell  sx={{
-          color:'inherit',
-          fontSize:{xs:'10px', lg:'16px'},
-          }}>KASUJ<br/>LINIĘ</TableCell>
+    <ConditionalCell>CASTO</ConditionalCell>
+    <ConditionalCell>EAN</ConditionalCell>
+        <TableCell  sx={tableCellSx}>NAZWA</TableCell>
+    <ConditionalCell>WAGA</ConditionalCell>
+        <TableCell  sx={tableCellSx}>ILOŚĆ</TableCell>
+        <TableCell  sx={tableCellSx}>SUMA</TableCell>
+        <TableCell  sx={tableCellSx}>KASUJ<br/>LINIĘ</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -229,19 +202,13 @@ const handleKeyDown = (e) => {
     overflow: 'hidden',
     transition: 'opacity 0.8s ease, max-height 0.8s ease',
      }}>
-      {!isSmallScreen && (
-        <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }}>{row[0].casto}</TableCell> 
-        )}
-      {!isSmallScreen && (
-        <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }}>{row[0].ean}</TableCell> 
-        )}
-      {!isSmallScreen && (
-        <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }} >{row[0].waga}</TableCell>
-      )}
-      <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }}>{row[0].nazwa}</TableCell>
-      <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }} >{row.ilość}</TableCell>
-      <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }} >{row.suma} KG</TableCell>
-      <TableCell sx={{ color: 'inherit', fontSize:{xs:'8px', lg:'16px'}, }} >
+      <ConditionalCell>{row[0].casto}</ConditionalCell>
+      <ConditionalCell>{row[0].ean}</ConditionalCell>
+        <TableCell sx={tableCellSx}>{row[0].nazwa}</TableCell>
+      <ConditionalCell>{row[0].waga}</ConditionalCell>
+      <TableCell sx={tableCellSx}>{row.ilość}</TableCell>
+      <TableCell sx={tableCellSx}>{row.suma} KG</TableCell>
+      <TableCell sx={tableCellSx}>
         <Switch
           checked={row.active}
           onChange={() => {
@@ -249,7 +216,6 @@ const handleKeyDown = (e) => {
             updatedArray[index].active = false; // przesuwa w lewo
             updatedArray[index].isRemoving = true;
             setDataArray(updatedArray);
-        
             setTimeout(() => {
               deleteTableRow(index); // usuwa po 1.1s
             }, 800);
@@ -285,9 +251,7 @@ const handleKeyDown = (e) => {
           setTransportName('');
           setTotalWeight(0);
         }}
-      >
-        wyczyść
-      </Button>
+      >Wyczyść</Button>
     </TableCell>
   </TableRow>
 </TableBody>

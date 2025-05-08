@@ -64,7 +64,7 @@ export default function BasicTabs({setContent}) {
       /> 
       )}
       <Box sx={{ borderBottom: 0, borderColor: 'inherit' }}>
-        {(menuVisible === false || !isSmallScreen) && ( 
+        {(!menuVisible || !isSmallScreen) && ( 
         <Tabs 
          orientation={isSmallScreen ? "vertical" : "horizontal"}
          value={value} onChange={handleChange} aria-label="basic tabs example"

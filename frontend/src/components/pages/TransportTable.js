@@ -38,9 +38,9 @@ const TransportTable = () => {
     <TableContainer component={Paper}
     sx={{
       mt:{lg:'0', xs:'60px'},
-      boxShadow:{lg:'var(--light-shadow)', xs:'none'},
+      boxShadow:{md:'var(--light-shadow)', xs:'none'},
         bgcolor:'transparent',
-        maxWidth:{xs:'100%', lg:'80%'},
+        maxWidth:{xs:'100%', md:'80%'},
         m:'0 auto',
         maxHeight: {sm:'100vh', lg:'600px'},
         overflowX: 'auto',
