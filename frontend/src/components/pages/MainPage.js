@@ -34,6 +34,32 @@ const MainPage = () => {
     setPrice(calculatedPrice);
   }, [transportName, distance]);
 
+ const inputCustomStyle = {
+  // Kolor labela bez focusa
+  '& label': {
+    color: 'var(--cadet-gray)',
+    cursor: 'pointer',
+  },
+  // Kolor labela po focusie
+  '& label.Mui-focused': {
+    color: 'primary.main',
+  },
+  // Stylowanie kontenera inputa (z obramowaniem)
+  '& .MuiOutlinedInput-root': {
+    color: 'var(--cadet-gray)',        // kolor tekstu
+    cursor: 'pointer',                 // kursor
+    '& fieldset': {
+      borderColor: 'var(--cadet-gray)' // obramowanie bez focusa
+    },
+    '&:hover fieldset': {
+      borderColor: 'var(--cadet-gray)' // obramowanie po hoverze
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'primary.main'      // obramowanie po focusie
+    },
+  },
+}
+
   return (
   <Box sx={{
     maxWidth:{lg:'70%', md:'80%', xs:'90%'},
@@ -61,8 +87,8 @@ const MainPage = () => {
             maxWidth:{sm:'100%', lg:'900px'},
             color:'var(--cadet-gray)',
              }}>
-          <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label"
+          <FormControl sx={inputCustomStyle} fullWidth>
+              <InputLabel id="demo-simple-select-label" 
               >Transport</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -70,12 +96,7 @@ const MainPage = () => {
                 value={transportName}
                 label="Transport"
                 onChange={(e) => setTransportName(e.target.value)}
-                sx={{
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'var(--cadet-gray)',
-                  },
-                  color: 'var(--cadet-gray)',
-                }}
+                sx={inputCustomStyle}
               >
               {Object.keys(transportData).map((key) => (
             <MenuItem key={key} value={key}>{transportData[key].polishName}</MenuItem>
@@ -90,15 +111,7 @@ const MainPage = () => {
       autoComplete="off"
     >
       <TextField 
-        sx={{
-          '& .MuiInputBase-input': {
-            color: 'var(--cadet-gray)', cursor:'pointer'},
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'var(--cadet-gray)',
-            },
-            color: 'var(--cadet-gray)',
-        
-        }}
+        sx={inputCustomStyle}
       id="outlined-basic" 
       label="Dystans" 
       variant="outlined"
@@ -109,10 +122,11 @@ const MainPage = () => {
       />
     </Box>
       <TextField 
-      sx={{
+      sx={[inputCustomStyle,
+        {
         '& .MuiInputBase-input': {color: 'var(--cadet-gray)', textAlign:'center'},
         pointerEvents:'none',    
-      }}
+      }]}
       id="outlined-basic" 
       label="Cena" 
       variant="outlined" 
